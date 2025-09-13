@@ -3,6 +3,7 @@ import ProductCard from "../components/ProductCard";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import type { IProduct } from "../interfaces";
+import ProductSkeleton from "../components/ProductSkeleton";
 
 
 const ProductsPage = () => {
@@ -13,7 +14,9 @@ const ProductsPage = () => {
 
     const {isLoading, data} = useQuery({queryKey: [`product`], queryFn: getProduct});
     console.log(data)
-    if(isLoading) return <h3>Loading ...</h3>;
+    if(isLoading) return <Grid m={5} templateColumns={"repeat(auto-fill, minmax(300px, 1fr))"} gap={4}>
+        {Array.from({length: 20}, (_, idx) => <ProductSkeleton key={idx}/>)}
+    </Grid>;
 
     return (
         <Grid m={5} templateColumns={"repeat(auto-fill, minmax(300px, 1fr))"} gap={4}>
