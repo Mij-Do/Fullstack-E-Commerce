@@ -1,19 +1,27 @@
 import { useColorMode } from "@chakra-ui/color-mode";
 import { Button, Card, Image, Stack, Text } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
+import type { IProduct } from "../interfaces";
 
-const ProductCard = () => {
+interface IProps {
+    product: IProduct;
+}
+
+const ProductCard = ({product}: IProps) => {
+    const {thumbnail, title} = product;
     const {colorMode} = useColorMode();
 return (
     <Card.Root overflow="hidden" border={"1px solid gray.300"}>
         <Card.Body gap="2">
             <Image
-                src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
+                src={`${import.meta.env.VITE_SERVER}${thumbnail?.url}`}
                 alt="Green double couch with wooden legs"
+                boxSize={"200px"}
                 rounded={"md"}
+                mx={"auto"}
             />
             <Stack spaceY={2} mt={2}>
-                <Card.Title>Living room Sofa</Card.Title>
+                <Card.Title>{title}</Card.Title>
                 <Card.Description>
                     This sofa is perfect for modern tropical spaces, baroque inspired
                     spaces.

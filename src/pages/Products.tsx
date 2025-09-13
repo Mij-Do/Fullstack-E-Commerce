@@ -1,21 +1,23 @@
 import { Grid } from "@chakra-ui/react";
 import ProductCard from "../components/ProductCard";
+import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
+import type { IProduct } from "../interfaces";
 
-interface IProps {
 
-}
+const ProductsPage = () => {
+    const getProduct = async () => {
+        const {data} = await axios.get(`${import.meta.env.VITE_SERVER}/api/products?populate=thumbnail&populate=categories`);
+        return data;
+    };
 
-const ProductsPage = ({}: IProps) => {
+    const {isLoading, data} = useQuery({queryKey: [`product`], queryFn: getProduct});
+    console.log(data)
+    if(isLoading) return <h3>Loading ...</h3>;
+
     return (
         <Grid m={5} templateColumns={"repeat(auto-fill, minmax(300px, 1fr))"} gap={4}>
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
+            {data?.data?.map((product: IProduct) => <ProductCard key={product.id} product={product}/>)}
         </Grid>
     )
 }
