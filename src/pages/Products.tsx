@@ -12,9 +12,14 @@ const ProductsPage = () => {
         return data;
     };
 
-    const {isLoading, data} = useQuery({queryKey: [`product`], queryFn: getProduct});
-    console.log(data)
-    if(isLoading) return <Grid m={5} templateColumns={"repeat(auto-fill, minmax(300px, 1fr))"} gap={4}>
+    const {isLoading, data} = useQuery({
+        queryKey: [`product`], 
+        queryFn: getProduct
+    });
+    localStorage.setItem("data", JSON.stringify(data?.data));
+    
+    if(isLoading) return 
+    <Grid m={5} templateColumns={"repeat(auto-fill, minmax(300px, 1fr))"} gap={4}>
         {Array.from({length: 20}, (_, idx) => <ProductSkeleton key={idx}/>)}
     </Grid>;
 

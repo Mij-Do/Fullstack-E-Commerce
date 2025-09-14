@@ -7,6 +7,12 @@ import RootLayout from "../pages/Layout";
 import HomePage from "../pages/Index";
 import AboutPage from "../pages/About";
 import ProductsPage from "../pages/Products";
+import ViewProduct from "../pages/ViewProduct";
+import type { IProduct } from "../interfaces";
+
+const data = localStorage.getItem("data");
+const resData = data ? JSON.parse(data) : null;
+
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -15,6 +21,9 @@ const router = createBrowserRouter(
             <Route path="/" element={<RootLayout />}>
                 <Route index element={<HomePage />} />
                 <Route path="products" element={<ProductsPage />} />
+                {resData.map((product: IProduct) => 
+                    <Route path={`products/${product.id}`} element={<ViewProduct key={product.id} product={product}/>} 
+                />)}
                 <Route path="about" element={<AboutPage />} />
             </Route>
         </>
