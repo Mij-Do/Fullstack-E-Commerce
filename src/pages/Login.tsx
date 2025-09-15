@@ -10,6 +10,8 @@ Text,
 Field,
 } from '@chakra-ui/react';
 import { useState, type ChangeEvent, type FormEvent } from 'react';
+import ErrorMsg from '../components/ui/ErrorMsg';
+import { formInputValidation } from '../validation';
 
 
 const Login = () => {
@@ -18,14 +20,36 @@ const Login = () => {
         email: '',
         password: ''
     });
+    const [errors, setErrors] = useState({
+        email: '',
+        password: '',
+    });
+    const [isValid, setIsValid] = useState(false);
+
     
     const onSubmitHandler = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        const {email, password} = user;
+        const errors = formInputValidation ({
+            email,
+            password
+        });
+        const hasMsgError = Object.values(errors).some(value => value === '') 
+        && Object.values(errors).every(value => value === '');
+
+        if (!hasMsgError) {
+            setErrors(errors);
+            setIsValid(true);
+            return;
+        } 
+        setIsValid(true);
+        console.log(user)
     }
     
     const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
         const {name, value} = event?.target;
         setUser((prev) => ({...prev, [name]: value}));
+        setErrors(prev => ({...prev, [name]: '',}));
     }
 
     return (
@@ -46,17 +70,23 @@ const Login = () => {
                     p={8}
                 >
                     <form onSubmit={onSubmitHandler}>
-                        <Field.Root>
+                        <Field.Root invalid={isValid}>
                             <Field.Label>
-                                Email
+                                Email <Field.RequiredIndicator />
                             </Field.Label>
                             <Input type='email' name='email' value={user.email} onChange={onChangeHandler} />
-                            <Field.ErrorText />
+                            <Field.ErrorText> 
+                                <ErrorMsg msg={errors.email}/>
+                            </ Field.ErrorText>
+                        </Field.Root>
+                        <Field.Root invalid={isValid}>
                             <Field.Label>
                                 Password
                             </Field.Label>
                             <Input type='password' name='password' value={user.password} onChange={onChangeHandler} />
-                            <Field.ErrorText />
+                            <Field.ErrorText> 
+                                <ErrorMsg msg={errors.password}/>
+                            </ Field.ErrorText>
                         </Field.Root>
                         <Stack spaceY={3}>
                             <Stack
