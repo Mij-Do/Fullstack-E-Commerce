@@ -10,6 +10,7 @@ import {
 import {FaWindowClose} from 'react-icons/fa';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import Nav from './ui/Nav';
+import { NavLink } from 'react-router-dom';
 
 
 
@@ -26,8 +27,11 @@ return (
                 >
                     {open ? <FaWindowClose /> : <GiHamburgerMenu />}
                 </ IconButton>
-
-                <Box>My App</Box>
+                <Box>
+                    <NavLink to={"/"}>
+                        E-Commerce
+                    </NavLink>
+                </Box>
                 <HStack alignItems={'center'}>
                     <HStack as={'nav'} display={{ base: 'none', md: 'flex' }} spaceX={5}>
                         <Nav />
