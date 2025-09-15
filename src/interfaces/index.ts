@@ -17,3 +17,9 @@ export interface IProduct {
         url: string;
     };
 }
+
+
+export interface IUser {
+    identifier: string;
+    password: string;
+}

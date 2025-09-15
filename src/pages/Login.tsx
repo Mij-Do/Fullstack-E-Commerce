@@ -12,16 +12,20 @@ Field,
 import { useState, type ChangeEvent, type FormEvent } from 'react';
 import ErrorMsg from '../components/ui/ErrorMsg';
 import { formInputValidation } from '../validation';
+import { useDispatch, useSelector } from 'react-redux';
+import { userLogin } from '../app/features/loginSlice';
+import type { AppDispatch, RootState } from '../app/store';
 
 
 const Login = () => {
-    
+    const dispatch = useDispatch<AppDispatch>();
+    const {loading} = useSelector((state: RootState) => state.login);
     const [user, setUser] = useState({
-        email: '',
+        identifier: '',
         password: ''
     });
     const [errors, setErrors] = useState({
-        email: '',
+        identifier: '',
         password: '',
     });
     const [isValid, setIsValid] = useState(false);
@@ -29,9 +33,9 @@ const Login = () => {
     
     const onSubmitHandler = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        const {email, password} = user;
+        const {identifier, password} = user;
         const errors = formInputValidation ({
-            email,
+            identifier,
             password
         });
         const hasMsgError = Object.values(errors).some(value => value === '') 
@@ -42,7 +46,7 @@ const Login = () => {
             setIsValid(true);
             return;
         } 
-        setIsValid(true);
+        dispatch(userLogin(user));
         console.log(user)
     }
     
@@ -50,6 +54,7 @@ const Login = () => {
         const {name, value} = event?.target;
         setUser((prev) => ({...prev, [name]: value}));
         setErrors(prev => ({...prev, [name]: '',}));
+        setIsValid(false);
     }
 
     return (
@@ -72,11 +77,11 @@ const Login = () => {
                     <form onSubmit={onSubmitHandler}>
                         <Field.Root invalid={isValid}>
                             <Field.Label>
-                                Email <Field.RequiredIndicator />
+                                Email 
                             </Field.Label>
-                            <Input type='email' name='email' value={user.email} onChange={onChangeHandler} />
+                            <Input type='identifier' name='identifier' value={user.identifier} onChange={onChangeHandler} />
                             <Field.ErrorText> 
-                                <ErrorMsg msg={errors.email}/>
+                                <ErrorMsg msg={errors.identifier}/>
                             </ Field.ErrorText>
                         </Field.Root>
                         <Field.Root invalid={isValid}>
@@ -93,7 +98,7 @@ const Login = () => {
                                 direction={{ base: 'column', sm: 'row' }}
                                 align={'start'}
                                 justify={'space-between'}>
-                                <Text color={'blue.400'}>Forgot password?</Text>
+                                <Text color={'blue.400'} cursor={"pointer"}>Forgot password?</Text>
                             </Stack>
                             <Button
                                 bg={'blue.400'}
@@ -102,6 +107,7 @@ const Login = () => {
                                     bg: 'blue.500',
                                 }}
                                 type='submit'
+                                loading={loading}
                                 >
                                 Sign in
                             </Button>
