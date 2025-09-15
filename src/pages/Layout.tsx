@@ -6,7 +6,9 @@ import { Box } from "@chakra-ui/react";
 const RootLayout = () => {
     return (
         <Box>
-            <Navbar />
+            <Box mb={5}>
+                <Navbar />
+            </Box>
             <Outlet />
         </Box>
     )
