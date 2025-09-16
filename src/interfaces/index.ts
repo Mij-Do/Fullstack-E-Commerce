@@ -20,8 +20,15 @@ export interface IProduct {
 
 
 export interface IUser {
+    id?: number;
+    documentId: string;
     identifier: string;
     password: string;
+}
+
+export interface IResponse {
+    jwt: string;
+    user: IUser;
 }
 
 export interface ApiErrorData {

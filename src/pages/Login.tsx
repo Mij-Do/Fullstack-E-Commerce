@@ -15,14 +15,16 @@ import { formInputValidation } from '../validation';
 import { useDispatch, useSelector } from 'react-redux';
 import { userLogin } from '../app/features/loginSlice';
 import type { AppDispatch, RootState } from '../app/store';
+import type { IUser } from '../interfaces';
 
 
 const Login = () => {
     const dispatch = useDispatch<AppDispatch>();
     const {loading} = useSelector((state: RootState) => state.login);
-    const [user, setUser] = useState({
+    const [user, setUser] = useState<IUser>({
         identifier: '',
-        password: ''
+        password: '',
+        documentId: '',
     });
     const [errors, setErrors] = useState({
         identifier: '',
@@ -49,7 +51,8 @@ const Login = () => {
         dispatch(userLogin(user));
         setUser({
             identifier: '',
-            password: ''
+            password: '',
+            documentId: '',
         })
     }
     

@@ -1,9 +1,10 @@
 import { createAsyncThunk, createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import { axiosInstance } from '../../config/axios.config';
-import type { ApiErrorData, IUser } from '../../interfaces';
+import type { ApiErrorData, IResponse, IUser } from '../../interfaces';
 import type { RootState } from '../store';
 import toast from 'react-hot-toast';
 import type { AxiosError } from 'axios';
+import CookieServices from '../../services/CookieServices';
 
 
 
@@ -24,7 +25,7 @@ export const userLogin = createAsyncThunk(
 
 interface loginUserState {
     loading: boolean;
-    data: IUser | null;
+    data: IResponse | null;
     error: null | undefined | unknown;
 }
 
@@ -42,9 +43,14 @@ const loginSlice = createSlice({
         builder.addCase(userLogin.pending, (state) => {
             state.loading = true;
         });
-        builder.addCase(userLogin.fulfilled, (state, action: PayloadAction<IUser>) => {
+        builder.addCase(userLogin.fulfilled, (state, action: PayloadAction<IResponse>) => {
             state.loading = false;
             state.data = action.payload;
+            const date = new Date();
+            const IN_DAYS = 3;
+            date.setDate(date.getDate() + IN_DAYS);
+            const options = {path: "/", expires: date};
+            CookieServices.set("jwt", action.payload.jwt, options);
             toast.success('Successfully created!');
         });
         builder.addCase(userLogin.rejected, (state, action) => {
