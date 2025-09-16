@@ -47,7 +47,10 @@ const Login = () => {
             return;
         } 
         dispatch(userLogin(user));
-        console.log(user)
+        setUser({
+            identifier: '',
+            password: ''
+        })
     }
     
     const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {

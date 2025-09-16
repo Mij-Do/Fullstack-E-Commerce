@@ -1,7 +1,10 @@
 import { createAsyncThunk, createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import { axiosInstance } from '../../config/axios.config';
-import type { IUser } from '../../interfaces';
+import type { ApiErrorData, IUser } from '../../interfaces';
 import type { RootState } from '../store';
+import toast from 'react-hot-toast';
+import type { AxiosError } from 'axios';
+
 
 
 export const userLogin = createAsyncThunk(
@@ -12,7 +15,6 @@ export const userLogin = createAsyncThunk(
         try {
             const {data} = await axiosInstance.post('/auth/local', user);
             console.log(data);
-            console.log(user)
             return data;
         } catch (error) {
             return rejectWithValue(error);
@@ -43,11 +45,13 @@ const loginSlice = createSlice({
         builder.addCase(userLogin.fulfilled, (state, action: PayloadAction<IUser>) => {
             state.loading = false;
             state.data = action.payload;
+            toast.success('Successfully created!');
         });
         builder.addCase(userLogin.rejected, (state, action) => {
             state.loading = false;
             state.data = null;
             state.error = action.payload as string;
+            toast.error(`${(action.payload as AxiosError<ApiErrorData>)?.response?.data?.error?.message}`);
         })
     },
 })

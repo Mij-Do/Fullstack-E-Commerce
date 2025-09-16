@@ -23,3 +23,12 @@ export interface IUser {
     identifier: string;
     password: string;
 }
+
+export interface ApiErrorData {
+        data: null;
+        error: {
+            message: string;
+            name?: string;
+            status?: number;
+        };
+}
