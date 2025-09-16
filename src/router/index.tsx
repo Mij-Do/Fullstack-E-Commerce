@@ -10,23 +10,64 @@ import ProductsPage from "../pages/Products";
 import ViewProduct from "../pages/ViewProduct";
 import type { IProduct } from "../interfaces";
 import Login from "../pages/Login";
+import AppLayout from "../pages/AppLayout";
+import ProtectedRoute from "../components/auth/ProtectedRoutes";
+import CookieServices from "../services/CookieServices";
 
 const data = localStorage.getItem("data");
 const resData = data ? JSON.parse(data) : null;
-
+const token = CookieServices.get("jwt");
 
 const router = createBrowserRouter(
     createRoutesFromElements(
         <>
             {/* Root Layout */}
-            <Route path="/" element={<RootLayout />}>
-                <Route index element={<HomePage />} />
-                <Route path="products" element={<ProductsPage />} />
-                {resData.map((product: IProduct) => 
-                    <Route path={`products/${product.id}`} element={<ViewProduct key={product.id} product={product}/>} 
-                />)}
-                <Route path="about" element={<AboutPage />} />
-                <Route path="login" element={<Login />} />
+            <Route element={<RootLayout />}>
+                <Route  path="/" element={<AppLayout />}>
+                    <Route index element={
+                        <ProtectedRoute 
+                            isAllowed={token}
+                            redirectPath="/login"
+                        >
+                            <HomePage />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="products" element={
+                        <ProtectedRoute 
+                            isAllowed={token}
+                            redirectPath="/login"
+                        >
+                            <ProductsPage />
+                        </ProtectedRoute>
+                    } />
+                    {resData.map((product: IProduct) => 
+                        <Route path={`products/${product.id}`} element={
+                            <ProtectedRoute 
+                                    isAllowed={token}
+                                    redirectPath="/login"
+                                >
+                                <ViewProduct key={product.id} product={product}/>
+        
+                            </ProtectedRoute>} 
+                    />)}
+                    <Route path="about" element={
+                        <ProtectedRoute 
+                            isAllowed={token}
+                            redirectPath="/login"
+                        >
+                            <AboutPage />
+                        </ProtectedRoute>
+                    } />
+                </Route>
+
+                <Route path="/login" element={
+                    <ProtectedRoute 
+                        isAllowed={!token}
+                        redirectPath="/"
+                    >
+                        <Login />
+                    </ProtectedRoute>
+                } />
             </Route>
         </>
     )

@@ -53,7 +53,10 @@ const Login = () => {
             identifier: '',
             password: '',
             documentId: '',
-        })
+        });
+        setTimeout(() => {
+            location.replace("/");
+        }, 2000);
     }
     
     const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
