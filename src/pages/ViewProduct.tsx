@@ -4,6 +4,8 @@ import { useColorMode } from "@chakra-ui/color-mode";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { FaArrowLeft } from "react-icons/fa";
+import { useDispatch } from "react-redux";
+import { addProductToCart } from "../app/features/cartSlice";
 
 interface IProps {
     product: IProduct;
@@ -13,6 +15,7 @@ const ViewProduct = ({product}: IProps) => {
     const {colorMode} = useColorMode();
     const navigate = useNavigate();
     const {title, thumbnail, description} = product;
+    const dispatch = useDispatch();
 
     useEffect(() => {
         document.title = `product ${title}`;
@@ -21,6 +24,9 @@ const ViewProduct = ({product}: IProps) => {
     const backHandler = () => {
         document.title = "FullStack E-commerce";
         navigate(-1);
+    }
+    const addProduct = () => {
+        dispatch(addProductToCart(product));
     }
     return (
         <Box m={2} spaceY={4} mx={"auto"} display={"flex"} flexDir={"column"} alignItems={"center"}>
@@ -50,6 +56,7 @@ const ViewProduct = ({product}: IProps) => {
                                 bg: colorMode === "light" ? "#2d2146ff" : "#9f7aea",
                                 border: "transparent",
                             }}
+                            onClick={addProduct}
                         >
                             Add to Cart
                         </Button>

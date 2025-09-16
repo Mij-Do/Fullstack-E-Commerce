@@ -2,6 +2,8 @@ import { useColorMode } from "@chakra-ui/color-mode";
 import { Button, Card, Image, Stack, Text } from "@chakra-ui/react";
 import { NavLink } from "react-router-dom";
 import type { IProduct } from "../interfaces";
+import { useDispatch } from "react-redux";
+import { addProductToCart } from "../app/features/cartSlice";
 
 interface IProps {
     product: IProduct;
@@ -10,6 +12,11 @@ interface IProps {
 const ProductCard = ({product}: IProps) => {
     const {thumbnail, title, description, id} = product;
     const {colorMode} = useColorMode();
+    const dispatch = useDispatch();
+
+    const addProduct = () => {
+        dispatch(addProductToCart(product));
+    }
     
 return (
     <Card.Root overflow="hidden" border={"1px solid gray.300"}>
@@ -30,14 +37,24 @@ return (
                     $450
                 </Text>
                 <Button 
-                asChild
-                bg={colorMode === "light" ? "#9f7aea" : "#2d2146ff"}
-                _hover={{
-                    bg: colorMode === "light" ? "#2d2146ff" : "#9f7aea",
-                    border: "transparent",
-                }}
+                    asChild
+                    bg={colorMode === "light" ? "#9f7aea" : "#2d2146ff"}
+                    _hover={{
+                        bg: colorMode === "light" ? "#2d2146ff" : "#9f7aea",
+                        border: "transparent",
+                    }}
                 >
                     <NavLink to={`${id}`}>View Details</NavLink>
+                </Button>
+                <Button
+                    bg={colorMode === "light" ? "#9f7aea" : "#2d2146ff"}
+                    _hover={{
+                        bg: colorMode === "light" ? "#2d2146ff" : "#9f7aea",
+                        border: "transparent",
+                    }}
+                    onClick={addProduct}
+                >
+                    Add to Cart
                 </Button>
             </Stack>
         </Card.Body>
