@@ -2,20 +2,29 @@ import { useColorMode } from "@chakra-ui/color-mode";
 import { Button, Card, Image, Stack, Text } from "@chakra-ui/react";
 import { NavLink } from "react-router-dom";
 import type { IProduct } from "../interfaces";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addProductToCart } from "../app/features/cartSlice";
+import toast from "react-hot-toast";
+import type { RootState } from "../app/store";
 
 interface IProps {
     product: IProduct;
 }
 
 const ProductCard = ({product}: IProps) => {
+    const {cartItems} = useSelector((state: RootState) => state.cart);
     const {thumbnail, title, description, id} = product;
     const {colorMode} = useColorMode();
     const dispatch = useDispatch();
 
     const addProduct = () => {
         dispatch(addProductToCart(product));
+        const exists = cartItems.find(item => item.id === id);
+        if (exists) {
+            toast.success("Increased Product Quantity Because Product already Added");
+        } else {
+            toast.success("Product Added to Your Cart Successfully");
+        }
     }
     
 return (

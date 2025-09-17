@@ -4,17 +4,20 @@ import { useColorMode } from "@chakra-ui/color-mode";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { FaArrowLeft } from "react-icons/fa";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addProductToCart } from "../app/features/cartSlice";
+import toast from "react-hot-toast";
+import type { RootState } from "../app/store";
 
 interface IProps {
     product: IProduct;
 }
 
 const ViewProduct = ({product}: IProps) => {
+    const {cartItems} = useSelector((state: RootState) => state.cart);
     const {colorMode} = useColorMode();
     const navigate = useNavigate();
-    const {title, thumbnail, description} = product;
+    const {title, thumbnail, description, id} = product;
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -27,6 +30,12 @@ const ViewProduct = ({product}: IProps) => {
     }
     const addProduct = () => {
         dispatch(addProductToCart(product));
+        const exists = cartItems.find(item => item.id === id);
+        if (exists) {
+            toast.success("Increased Product Quantity Because Product already Added");
+        } else {
+            toast.success("Product Added to Your Cart Successfully");
+        }
     }
     return (
         <Box m={2} spaceY={4} mx={"auto"} display={"flex"} flexDir={"column"} alignItems={"center"}>
