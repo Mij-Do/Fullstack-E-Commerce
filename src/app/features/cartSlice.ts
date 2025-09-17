@@ -1,5 +1,6 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import type { IProduct } from '../../interfaces'
+import { addToCart } from '../../utils';
 
 interface initialState {
     cartItems: IProduct[];
@@ -14,7 +15,7 @@ const cartSlice = createSlice({
     initialState,
     reducers: {
         addProductToCart: (state, action: PayloadAction<IProduct>) => {
-            state.cartItems = [...state.cartItems, action.payload];
+            state.cartItems = addToCart(state.cartItems, action.payload);
         }
     },
 });

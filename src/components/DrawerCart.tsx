@@ -10,7 +10,7 @@ const DrawerCart = () => {
 
     const onCloseDrawer = () => dispatch(onCloseCartDrawerAction());
     return (
-        <Drawer.Root open={isOpenCartDrawer} onInteractOutside={onCloseDrawer} >
+        <Drawer.Root open={isOpenCartDrawer} onInteractOutside={onCloseDrawer}>
             <Portal>
                 <Drawer.Backdrop />
                 <Drawer.Positioner>
@@ -19,7 +19,7 @@ const DrawerCart = () => {
                             <Drawer.Title>Cart</Drawer.Title>
                         </Drawer.Header>
                         <Drawer.Body>
-                            {cartItems.map(product => <h2 key={product.id}>{product.title}</h2>)}
+                            {cartItems.map(product => <h2 key={product.id}>{product.title}: {product.qty} Items</h2>)}
                         </Drawer.Body>
                         <Drawer.Footer>
                             <Button bg={"red.500"} _hover={{bg: "red.400"}}>Clear All</Button>

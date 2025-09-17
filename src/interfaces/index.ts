@@ -16,6 +16,7 @@ export interface IProduct {
         name: string;
         url: string;
     };
+    qty: number;
 }
 
 
