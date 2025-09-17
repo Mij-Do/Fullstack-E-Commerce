@@ -13,6 +13,8 @@ import Login from "../pages/Login";
 import AppLayout from "../pages/AppLayout";
 import ProtectedRoute from "../components/auth/ProtectedRoutes";
 import CookieServices from "../services/CookieServices";
+import DashboardLayout from "../pages/dashboard/DashboardLayout";
+import DashboardHome from "../pages/dashboard";
 
 const data = localStorage.getItem("data");
 const resData = data ? JSON.parse(data) : null;
@@ -59,7 +61,9 @@ const router = createBrowserRouter(
                         </ProtectedRoute>
                     } />
                 </Route>
-
+                <Route path="/dashboard" element={<DashboardLayout />}>
+                    <Route index element={<DashboardHome />}/>
+                </Route>
                 <Route path="/login" element={
                     <ProtectedRoute 
                         isAllowed={!token}
