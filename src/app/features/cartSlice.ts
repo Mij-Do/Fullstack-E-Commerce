@@ -16,10 +16,13 @@ const cartSlice = createSlice({
     reducers: {
         addProductToCart: (state, action: PayloadAction<IProduct>) => {
             state.cartItems = addToCart(state.cartItems, action.payload);
+        },
+        removeProductsFromCart: (state, action: PayloadAction<IProduct[]>) => {
+            state.cartItems = action.payload;
         }
     },
 });
 
-export const { addProductToCart } = cartSlice.actions;
+export const { addProductToCart, removeProductsFromCart } = cartSlice.actions;
 
 export default cartSlice;

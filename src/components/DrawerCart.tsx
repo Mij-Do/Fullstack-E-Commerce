@@ -2,6 +2,7 @@ import { Button, CloseButton, Drawer, Portal } from "@chakra-ui/react"
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../app/store";
 import { onCloseCartDrawerAction } from "../app/features/globalSlice";
+import ViewProductsInDrawer from "./ViewProductsInDrawer";
 
 const DrawerCart = () => {
     const {isOpenCartDrawer} = useSelector((state: RootState) => state.global);
@@ -19,10 +20,10 @@ const DrawerCart = () => {
                             <Drawer.Title>Cart</Drawer.Title>
                         </Drawer.Header>
                         <Drawer.Body>
-                            {cartItems.map(product => <h2 key={product.id}>{product.title}: {product.qty} Items</h2>)}
+                            {cartItems.map(product => <ViewProductsInDrawer key={product.id} product={product}/>)}
                         </Drawer.Body>
                         <Drawer.Footer>
-                            <Button bg={"red.500"} _hover={{bg: "red.400"}}>Clear All</Button>
+                            <Button bg={"red.700"} _hover={{bg: "red.600"}}>Clear All</Button>
                         </Drawer.Footer>
                         <Drawer.CloseTrigger asChild>
                             <CloseButton size="sm" onClick={onCloseDrawer}/>
