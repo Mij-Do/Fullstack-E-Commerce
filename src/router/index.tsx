@@ -40,7 +40,7 @@ const router = createBrowserRouter(
                             <ProductsPage />
                         </ProtectedRoute>
                     } />
-                    {resData.map((product: IProduct) => 
+                    {resData?.map((product: IProduct) => 
                         <Route path={`products/${product.id}`} element={
                             <ProtectedRoute 
                                     isAllowed={token}

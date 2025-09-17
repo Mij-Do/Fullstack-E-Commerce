@@ -7,7 +7,8 @@ import {
   QueryClientProvider,
 } from '@tanstack/react-query';
 import { Provider } from "react-redux";
-import { store } from './app/store.ts';
+import { persistor, store } from './app/store.ts';
+import { PersistGate } from 'redux-persist/integration/react';
 
 
 const queryClient = new QueryClient();
@@ -15,10 +16,12 @@ const queryClient = new QueryClient();
 
 createRoot(document.getElementById('root')!).render(
   <Provider store={store}>
-    <QueryClientProvider client={queryClient}>
-      <ChakraProvider value={defaultSystem}>
-        <App />
-      </ChakraProvider>
-    </QueryClientProvider>
+    <PersistGate loading={null} persistor={persistor}>
+      <QueryClientProvider client={queryClient}>
+        <ChakraProvider value={defaultSystem}>
+          <App />
+        </ChakraProvider>
+      </QueryClientProvider>
+    </PersistGate>
   </Provider>
 )
