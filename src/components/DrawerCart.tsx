@@ -3,7 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../app/store";
 import { onCloseCartDrawerAction } from "../app/features/globalSlice";
 import ViewProductsInDrawer from "./ViewProductsInDrawer";
-import { removeProductsFromCart } from "../app/features/cartSlice";
+import { clearAllProducts } from "../app/features/cartSlice";
+import toast from "react-hot-toast";
+
 
 const DrawerCart = () => {
     const {isOpenCartDrawer} = useSelector((state: RootState) => state.global);
@@ -12,7 +14,9 @@ const DrawerCart = () => {
 
     const onCloseDrawer = () => dispatch(onCloseCartDrawerAction());
     const clearAllItemsFromCart = () => {
-        dispatch(removeProductsFromCart([]));
+        dispatch(clearAllProducts());
+        toast.success("Your Cart is Empty now");
+        onCloseDrawer();
     }
     return (
         <Drawer.Root open={isOpenCartDrawer} onInteractOutside={onCloseDrawer}>

@@ -1,9 +1,10 @@
 import { Flex, Image, Stack, Text, Button } from "@chakra-ui/react";
 
 import type { IProduct } from "../interfaces";
-import { useDispatch, useSelector } from "react-redux";
-import type { RootState } from "../app/store";
+import { useDispatch } from "react-redux";
 import { removeProductsFromCart } from "../app/features/cartSlice";
+import toast from "react-hot-toast";
+import { FaTrash } from "react-icons/fa";
 
 interface IProps {
     product: IProduct;
@@ -11,14 +12,11 @@ interface IProps {
 
 const ViewProductsInDrawer = ({product}: IProps) => {
     const dispatch = useDispatch();
-    const {cartItems} = useSelector((state: RootState) => state.cart);
     const {thumbnail, title, price, qty, id} = product;
 
     const onRemoveProductFromCart = () => {
-        const filter = cartItems.filter(pro => pro.id !== id);
-        if (filter) {
-            dispatch(removeProductsFromCart(filter));
-        }
+        dispatch(removeProductsFromCart(id));
+        toast.success("Product is Removed");
     }
     return (
         <Flex 
@@ -37,7 +35,7 @@ const ViewProductsInDrawer = ({product}: IProps) => {
                 <Text>Price: ${price}</Text>
                 <Text>Quantity: {qty}</Text>
             </Stack>
-            <Button w={"full"} bg={"red.500"} _hover={{bg: "red.400"}} onClick={onRemoveProductFromCart}>Remove</Button>
+            <Button w={"full"} bg={"red.500"} _hover={{bg: "red.400"}} onClick={onRemoveProductFromCart}> <FaTrash /> Remove</Button>
         </Flex>
     )
 }
