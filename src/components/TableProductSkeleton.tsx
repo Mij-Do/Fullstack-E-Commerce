@@ -1,14 +1,17 @@
-import { Table, Skeleton } from "@chakra-ui/react";
+import { Table, Skeleton, SkeletonCircle, Flex } from "@chakra-ui/react";
 
 const TableProductSkeleton = () => {
     return (
         <Table.Root size="sm" striped>
             <Table.Header>
                 <Table.Row>
-                    <Table.ColumnHeader>Product</Table.ColumnHeader>
+                    <Table.ColumnHeader>ID</Table.ColumnHeader>
+                    <Table.ColumnHeader>Title</Table.ColumnHeader>
                     <Table.ColumnHeader>Category</Table.ColumnHeader>
+                    <Table.ColumnHeader>Thumbnail</Table.ColumnHeader>
                     <Table.ColumnHeader>Price</Table.ColumnHeader>
-                    <Table.ColumnHeader textAlign="end">Act</Table.ColumnHeader>
+                    <Table.ColumnHeader>Stock</Table.ColumnHeader>
+                    <Table.ColumnHeader textAlign="end">Action</Table.ColumnHeader>
                 </Table.Row>
             </Table.Header>
             <Table.Body>
@@ -23,13 +26,36 @@ const TableProductSkeleton = () => {
                         <Table.Cell>
                             <Skeleton height="16px" width="70px" />
                         </Table.Cell>
-                        <Table.Cell display={"flex"} spaceX={2} justifyContent={"flex-end"}>
-                            <Skeleton height="16px" width="40px" bg={"red.400"}/>
-                            <Skeleton height="16px" width="40px" bg={"purple.400"}/>
+                        <Table.Cell>
+                            <SkeletonCircle height="50px" width="50px" />
+                        </Table.Cell>
+                        <Table.Cell>
+                            <Skeleton height="16px" width="70px" />
+                        </Table.Cell>
+                        <Table.Cell>
+                            <Skeleton height="16px" width="70px" />
+                        </Table.Cell>
+                        <Table.Cell>
+                            <Flex alignItems={"center"} justifyContent={"flex-end"} spaceX={2}>
+                                <Skeleton height="16px" width="40px" bg={"red.400"}/>
+                                <Skeleton height="16px" width="40px" bg={"purple.400"}/>
+                                <Skeleton height="16px" width="40px" bg={"purple.400"}/>
+                            </Flex>
                         </Table.Cell>
                     </Table.Row>
                 ))}
             </Table.Body>
+            <Table.Footer>
+                <Table.Row>
+                    <Table.ColumnHeader>ID</Table.ColumnHeader>
+                    <Table.ColumnHeader>Title</Table.ColumnHeader>
+                    <Table.ColumnHeader>Category</Table.ColumnHeader>
+                    <Table.ColumnHeader>Thumbnail</Table.ColumnHeader>
+                    <Table.ColumnHeader>Price</Table.ColumnHeader>
+                    <Table.ColumnHeader>Stock</Table.ColumnHeader>
+                    <Table.ColumnHeader textAlign="end">Action</Table.ColumnHeader>
+                </Table.Row>
+            </Table.Footer>
         </Table.Root>
     );
 };

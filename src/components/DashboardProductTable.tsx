@@ -1,37 +1,64 @@
-import { Table } from "@chakra-ui/react"
+import { Button, Flex, Image, Table } from "@chakra-ui/react"
 import TableProductSkeleton from "./TableProductSkeleton"
+import { useGetDashboardProductsQuery } from "../app/services/apiSlice";
+import type { IProduct } from "../interfaces";
 
 const DashboardProductTable = () => {
-
-    if (false) return  <TableProductSkeleton />;
+    const {isLoading, data, error} = useGetDashboardProductsQuery(0);
+    console.log({isLoading, data, error})
+    if (true) return  <TableProductSkeleton />;
     return (
         <Table.Root size="sm" striped>
             <Table.Header>
                 <Table.Row>
-                    <Table.ColumnHeader>Product</Table.ColumnHeader>
+                    <Table.ColumnHeader>ID</Table.ColumnHeader>
+                    <Table.ColumnHeader>Title</Table.ColumnHeader>
                     <Table.ColumnHeader>Category</Table.ColumnHeader>
-                    <Table.ColumnHeader textAlign="end">Price</Table.ColumnHeader>
+                    <Table.ColumnHeader>Thumbnail</Table.ColumnHeader>
+                    <Table.ColumnHeader>Price</Table.ColumnHeader>
+                    <Table.ColumnHeader>Stock</Table.ColumnHeader>
+                    <Table.ColumnHeader textAlign="end">Action</Table.ColumnHeader>
                 </Table.Row>
             </Table.Header>
             <Table.Body>
-                {items.map((item) => (
-                <Table.Row key={item.id}>
-                    <Table.Cell>{item.name}</Table.Cell>
-                    <Table.Cell>{item.category}</Table.Cell>
-                    <Table.Cell textAlign="end">{item.price}</Table.Cell>
+                {data.data.map((product: IProduct) => (
+                <Table.Row key={product.id}>
+                    <Table.Cell>{product.id}</Table.Cell>
+                    <Table.Cell>{product.title}</Table.Cell>
+                    <Table.Cell>{product.categories.map(title => title.title)}</Table.Cell>
+                    <Table.Cell>
+                        <Image 
+                            src={`${import.meta.env.VITE_SERVER}${product.thumbnail.url}`} 
+                            alt={product.thumbnail.name}
+                            w={"15%"} h={"15%"}
+                            rounded={"full"}
+                        />
+                    </Table.Cell>
+                    <Table.Cell>{product.price}</Table.Cell>
+                    <Table.Cell>{product.stock}</Table.Cell>
+                    <Table.Cell>
+                        <Flex alignItems={"center"} spaceX={2} justifyContent={"flex-end"}>
+                            <Button></Button>
+                            <Button></Button>
+                            <Button></Button>
+                        </Flex>
+                    </Table.Cell>
                 </Table.Row>
                 ))}
             </Table.Body>
+            <Table.Footer>
+                <Table.Row>
+                    <Table.ColumnHeader>ID</Table.ColumnHeader>
+                    <Table.ColumnHeader>Title</Table.ColumnHeader>
+                    <Table.ColumnHeader>Category</Table.ColumnHeader>
+                    <Table.ColumnHeader>Thumbnail</Table.ColumnHeader>
+                    <Table.ColumnHeader>Price</Table.ColumnHeader>
+                    <Table.ColumnHeader>Stock</Table.ColumnHeader>
+                    <Table.ColumnHeader textAlign="end">Action</Table.ColumnHeader>
+                </Table.Row>
+            </Table.Footer>
         </Table.Root>
     )
 }
-
-const items = [
-    { id: 1, name: "Laptop", category: "Electronics", price: 999.99 },
-    { id: 2, name: "Coffee Maker", category: "Home Appliances", price: 49.99 },
-    { id: 3, name: "Desk Chair", category: "Furniture", price: 150.0 },
-    { id: 4, name: "Smartphone", category: "Electronics", price: 799.99 },
-    { id: 5, name: "Headphones", category: "Accessories", price: 199.99 },
-]
 
 export default DashboardProductTable;

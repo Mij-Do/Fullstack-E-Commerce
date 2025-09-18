@@ -5,11 +5,11 @@ export interface IProduct {
     description: string;
     price: number;
     stock: number;
-    categories: {
-        id: number;
+    categories: [{
         documentId: string;
+        id: number;
         title: string;
-    };
+    }];
     thumbnail: {
         id: number;
         documentId: string;

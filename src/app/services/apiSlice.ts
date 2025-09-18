@@ -1,0 +1,20 @@
+import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
+
+export const apiSlice = createApi ({
+    reducerPath: "api",
+    tagTypes: ["Products"],
+    refetchOnReconnect: true,
+    refetchOnMountOrArgChange: true,
+    baseQuery: fetchBaseQuery({baseUrl: import.meta.env.VITE_SERVER}),
+    endpoints: builder => ({
+        getDashboardProducts: builder.query({
+            query: (arg: number) => {
+                return {
+                    url: `/api/products?populate=thumbnail&populate=categories`,
+                }
+            }
+        }),
+    }),
+});
+
+export const {useGetDashboardProductsQuery} = apiSlice;
