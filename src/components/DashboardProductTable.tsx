@@ -1,8 +1,9 @@
-import { Button, Flex, Image, Table, useDisclosure } from "@chakra-ui/react"
-import TableProductSkeleton from "./TableProductSkeleton"
+import { Button, Flex, Image, Table, useDisclosure } from "@chakra-ui/react";
+import TableProductSkeleton from "./TableProductSkeleton";
 import { useGetDashboardProductsQuery } from "../app/services/apiSlice";
 import type { IProduct } from "../interfaces";
 import Modal from "../shared/Modal";
+import {FiTrash, FiPenTool, FiEye} from "react-icons/fi"
 
 const DashboardProductTable = () => {
     const {open, onOpen, onClose} = useDisclosure();
@@ -41,9 +42,15 @@ const DashboardProductTable = () => {
                         <Table.Cell>{product.stock}</Table.Cell>
                         <Table.Cell>
                             <Flex alignItems={"center"} spaceX={2} justifyContent={"flex-end"}>
-                                <Button onClick={onOpen}></Button>
-                                <Button></Button>
-                                <Button></Button>
+                                <Button w={5} bg={"blue.400"} _hover={{bg: "blue.200"}}>
+                                    <FiPenTool />
+                                </Button>
+                                <Button w={5} bg={"red.400"} _hover={{bg: "red.200"}} onClick={onOpen}>
+                                    <FiTrash />
+                                </Button>
+                                <Button w={5} bg={"purple.400"} _hover={{bg: "purple.200"}}>
+                                    <FiEye />
+                                </Button>
                             </Flex>
                         </Table.Cell>
                     </Table.Row>
@@ -61,7 +68,12 @@ const DashboardProductTable = () => {
                     </Table.Row>
                 </Table.Footer>
             </Table.Root>
-            <Modal isOpen={open} onClose={onClose}/>
+            <Modal 
+                isOpen={open} 
+                onClose={onClose} 
+                title="Are You Sure ?" 
+                description="Remove Product description" 
+            />
         </>
     )
 }

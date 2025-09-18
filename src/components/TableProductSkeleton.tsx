@@ -37,8 +37,8 @@ const TableProductSkeleton = () => {
                         </Table.Cell>
                         <Table.Cell>
                             <Flex alignItems={"center"} justifyContent={"flex-end"} spaceX={2}>
+                                <Skeleton height="16px" width="40px" bg={"blue.400"}/>
                                 <Skeleton height="16px" width="40px" bg={"red.400"}/>
-                                <Skeleton height="16px" width="40px" bg={"purple.400"}/>
                                 <Skeleton height="16px" width="40px" bg={"purple.400"}/>
                             </Flex>
                         </Table.Cell>

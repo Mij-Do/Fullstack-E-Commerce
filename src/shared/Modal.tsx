@@ -3,9 +3,13 @@ import { Button, CloseButton, Dialog, Portal } from "@chakra-ui/react";
 interface IProps {
     isOpen: boolean;
     onClose: () => void;
+    title: string;
+    description: string;
+    cancelBtn?: string;
+    okBtn?: string;
 }
 
-const Modal = ({isOpen, onClose}: IProps) => {
+const Modal = ({isOpen, onClose, title, description, okBtn = "Remove", cancelBtn = "Cancel"}: IProps) => {
     return (
         <Dialog.Root open={isOpen} onInteractOutside={onClose} onEscapeKeyDown={onClose}>
             <Portal>
@@ -13,19 +17,18 @@ const Modal = ({isOpen, onClose}: IProps) => {
                 <Dialog.Positioner>
                     <Dialog.Content>
                         <Dialog.Header>
-                            <Dialog.Title>Dialog Title</Dialog.Title>
+                            <Dialog.Title>{title}</Dialog.Title>
                         </Dialog.Header>
                         <Dialog.Body>
                             <p>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-                                eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                {description}
                             </p>
                         </Dialog.Body>
                         <Dialog.Footer>
                             <Dialog.ActionTrigger asChild>
-                                <Button variant="outline" onClick={onClose}>Cancel</Button>
+                                <Button variant="outline" onClick={onClose}>{cancelBtn}</Button>
                             </Dialog.ActionTrigger>
-                            <Button>Save</Button>
+                            <Button>{okBtn}</Button>
                         </Dialog.Footer>
                         <Dialog.CloseTrigger asChild>
                             <CloseButton size="sm" onClick={onClose}/>
