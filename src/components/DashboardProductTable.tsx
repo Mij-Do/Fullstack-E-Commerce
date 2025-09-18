@@ -4,11 +4,22 @@ import { useDeleteDashboardProductsMutation, useGetDashboardProductsQuery } from
 import type { IProduct } from "../interfaces";
 import Modal from "../shared/Modal";
 import {FiTrash, FiPenTool, FiEye} from "react-icons/fi"
+import toast from "react-hot-toast";
+
 
 const DashboardProductTable = () => {
     const {open, onOpen, onClose} = useDisclosure();
     const {isLoading, data} = useGetDashboardProductsQuery(0);
     const [removeProduct, {isLoading: isRemoving, isSuccess}] = useDeleteDashboardProductsMutation();
+    console.log(data.data.map((product: IProduct) => product.documentId));
+    // handler
+    const onRemoveHandler = () => {
+        removeProduct(data.data.map((product: IProduct) => product.documentId));
+        onClose();
+        if (isSuccess) {
+            toast.success("Product is Removed");
+        }
+    }
 
     if (isLoading) return  <TableProductSkeleton />;
     return (
@@ -74,8 +85,7 @@ const DashboardProductTable = () => {
                 onClose={onClose} 
                 title="Are You Sure ?" 
                 description="Remove Product description" 
-                // we need to give this FUNC a documentId
-                onRemoveHandler={() => removeProduct()}
+                onRemoveHandler={onRemoveHandler}
                 isRemoving={isRemoving}
             />
         </>
