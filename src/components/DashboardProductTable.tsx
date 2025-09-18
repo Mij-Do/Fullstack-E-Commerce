@@ -1,6 +1,6 @@
 import { Button, Flex, Image, Table, useDisclosure } from "@chakra-ui/react";
 import TableProductSkeleton from "./TableProductSkeleton";
-import { useGetDashboardProductsQuery } from "../app/services/apiSlice";
+import { useDeleteDashboardProductsMutation, useGetDashboardProductsQuery } from "../app/services/productsApiSlice";
 import type { IProduct } from "../interfaces";
 import Modal from "../shared/Modal";
 import {FiTrash, FiPenTool, FiEye} from "react-icons/fi"
@@ -8,6 +8,7 @@ import {FiTrash, FiPenTool, FiEye} from "react-icons/fi"
 const DashboardProductTable = () => {
     const {open, onOpen, onClose} = useDisclosure();
     const {isLoading, data} = useGetDashboardProductsQuery(0);
+    const [removeProduct, {isLoading: isRemoving, isSuccess}] = useDeleteDashboardProductsMutation();
 
     if (isLoading) return  <TableProductSkeleton />;
     return (
@@ -73,6 +74,9 @@ const DashboardProductTable = () => {
                 onClose={onClose} 
                 title="Are You Sure ?" 
                 description="Remove Product description" 
+                // we need to give this FUNC a documentId
+                onRemoveHandler={() => removeProduct()}
+                isRemoving={isRemoving}
             />
         </>
     )

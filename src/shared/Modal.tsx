@@ -7,9 +7,11 @@ interface IProps {
     description: string;
     cancelBtn?: string;
     okBtn?: string;
+    isRemoving?: boolean;
+    onRemoveHandler: () => void;
 }
 
-const Modal = ({isOpen, onClose, title, description, okBtn = "Remove", cancelBtn = "Cancel"}: IProps) => {
+const Modal = ({isOpen, onClose, title, description, okBtn = "Remove", cancelBtn = "Cancel", onRemoveHandler, isRemoving}: IProps) => {
     return (
         <Dialog.Root open={isOpen} onInteractOutside={onClose} onEscapeKeyDown={onClose}>
             <Portal>
@@ -28,7 +30,7 @@ const Modal = ({isOpen, onClose, title, description, okBtn = "Remove", cancelBtn
                             <Dialog.ActionTrigger asChild>
                                 <Button variant="outline" onClick={onClose}>{cancelBtn}</Button>
                             </Dialog.ActionTrigger>
-                            <Button>{okBtn}</Button>
+                            <Button variant={"solid"} loading={isRemoving} onClick={onRemoveHandler}>{okBtn}</Button>
                         </Dialog.Footer>
                         <Dialog.CloseTrigger asChild>
                             <CloseButton size="sm" onClick={onClose}/>
