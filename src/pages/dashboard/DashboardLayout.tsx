@@ -12,8 +12,8 @@ import {
     useBreakpointValue,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { FiHome, FiSettings, FiUser, FiMenu } from "react-icons/fi";
-import { Outlet } from "react-router-dom";
+import { FiMenu } from "react-icons/fi";
+import { NavLink, Outlet } from "react-router-dom";
 
 
 function SidebarContent() {
@@ -22,14 +22,11 @@ function SidebarContent() {
             <Text fontSize="2xl" fontWeight="bold">
                 My Dashboard
             </Text>
-            <Button justifyContent="flex-start" variant="ghost">
-                <FiHome /> Home
+            <Button asChild _hover={{bg: "#2d2146ff", p: 2, color: "white", transition: "all"}} justifyContent="flex-start" variant="ghost">
+                <NavLink to={"/dashboard"}>Home</NavLink>
             </Button>
-            <Button justifyContent="flex-start" variant="ghost">
-                <FiUser /> Profile
-            </Button>
-            <Button justifyContent="flex-start" variant="ghost">
-                <FiSettings /> Settings
+            <Button asChild _hover={{bg: "#2d2146ff", p: 2, color: "white", transition: "all"}} justifyContent="flex-start" variant="ghost">
+                <NavLink to={"/dashboard/products"}>Products</NavLink>
             </Button>
         </Stack>
     );
