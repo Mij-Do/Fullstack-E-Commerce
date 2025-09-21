@@ -5,21 +5,26 @@ import type { IProduct } from "../interfaces";
 import Modal from "../shared/Modal";
 import {FiTrash, FiPenTool, FiEye} from "react-icons/fi"
 import toast from "react-hot-toast";
+import { useEffect, useState } from "react";
 
 
 const DashboardProductTable = () => {
+    const [removeProductId, setRemoveProductId] = useState('');
     const {open, onOpen, onClose} = useDisclosure();
     const {isLoading, data} = useGetDashboardProductsQuery(0);
     const [removeProduct, {isLoading: isRemoving, isSuccess}] = useDeleteDashboardProductsMutation();
-    console.log(data);
-    console.log(data?.data?.map((product: IProduct) => product.documentId)[0]);
-    // handler
-    const onRemoveHandler = () => {
-        removeProduct(data?.data?.map((product: IProduct) => product.documentId)[2]);
-        onClose();
+    
+    useEffect(() => {
         if (isSuccess) {
+            setRemoveProductId('');
             toast.success("Product is Removed");
         }
+    }, [isSuccess])
+
+    // handler
+    const onRemoveHandler = () => {
+        removeProduct(removeProductId);
+        onClose();
     }
 
     if (isLoading) return  <TableProductSkeleton />;
@@ -38,7 +43,7 @@ const DashboardProductTable = () => {
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    {data?.data?.map((product: IProduct) => (
+                    {data?.data?.length ? data?.data?.map((product: IProduct) => (
                     <Table.Row key={product.id}>
                         <Table.Cell>{product.id}</Table.Cell>
                         <Table.Cell>{product.title}</Table.Cell>
@@ -58,7 +63,10 @@ const DashboardProductTable = () => {
                                 <Button w={5} bg={"blue.400"} _hover={{bg: "blue.200"}}>
                                     <FiPenTool />
                                 </Button>
-                                <Button w={5} bg={"red.400"} _hover={{bg: "red.200"}} onClick={onOpen}>
+                                <Button w={5} bg={"red.400"} _hover={{bg: "red.200"}} onClick={() => {
+                                    setRemoveProductId(product.documentId);
+                                    onOpen();
+                                }}>
                                     <FiTrash />
                                 </Button>
                                 <Button w={5} bg={"purple.400"} _hover={{bg: "purple.200"}}>
@@ -67,7 +75,8 @@ const DashboardProductTable = () => {
                             </Flex>
                         </Table.Cell>
                     </Table.Row>
-                    ))}
+                    )) 
+                    :  <h2>You Have No Products ...</h2> }
                 </Table.Body>
                 <Table.Footer>
                     <Table.Row>

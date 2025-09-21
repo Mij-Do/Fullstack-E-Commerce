@@ -1,5 +1,6 @@
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 import CookieServices from '../../services/CookieServices';
+import type { IProduct } from '../../interfaces';
 
 export const productsApiSlice = createApi ({
     reducerPath: "api",
@@ -13,7 +14,11 @@ export const productsApiSlice = createApi ({
                 return {
                     url: `/api/products?populate=thumbnail&populate=categories`,
                 }
-            }
+            },
+            providesTags: (result) =>
+            result
+            ? [...result.data?.map(({documentId}: IProduct) => ({ type: 'Products' as const, documentId })), 'Products']
+            : ['Products'],
         }),
         deleteDashboardProducts: builder.mutation({
             query: (documentId: string) => {
@@ -25,6 +30,7 @@ export const productsApiSlice = createApi ({
                     },
                 };
             },
+            invalidatesTags: (documentId) => [{ type: 'Products', documentId }],
         }),
     }),
 });
