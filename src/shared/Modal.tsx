@@ -30,7 +30,14 @@ const Modal = ({isOpen, onClose, title, description, okBtn = "Remove", cancelBtn
                             <Dialog.ActionTrigger asChild>
                                 <Button variant="outline" onClick={onClose}>{cancelBtn}</Button>
                             </Dialog.ActionTrigger>
-                            <Button variant={"solid"} loading={isRemoving} onClick={onRemoveHandler}>{okBtn}</Button>
+                            <Button 
+                                variant={"solid"} 
+                                bg={"red.500"} 
+                                _hover={{bg: "red.300"}} 
+                                loading={isRemoving}
+                                onClick={onRemoveHandler}>
+                                {okBtn}
+                            </Button>
                         </Dialog.Footer>
                         <Dialog.CloseTrigger asChild>
                             <CloseButton size="sm" onClick={onClose}/>

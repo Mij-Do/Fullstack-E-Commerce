@@ -13,13 +13,13 @@ interface IProps {
 
 const ProductCard = ({product}: IProps) => {
     const {cartItems} = useSelector((state: RootState) => state.cart);
-    const {thumbnail, title, description, id} = product;
+    const {thumbnail, title, description, documentId} = product;
     const {colorMode} = useColorMode();
     const dispatch = useDispatch();
 
     const addProduct = () => {
         dispatch(addProductToCart(product));
-        const exists = cartItems.find(item => item.id === id);
+        const exists = cartItems.find(item => item.documentId === documentId);
         if (exists) {
             toast.success("Increased Product Quantity Because Product already Added");
         } else {
@@ -53,7 +53,7 @@ return (
                         border: "transparent",
                     }}
                 >
-                    <NavLink to={`${id}`}>View Details</NavLink>
+                    <NavLink to={`${documentId}`}>View Details</NavLink>
                 </Button>
                 <Button
                     bg={colorMode === "light" ? "#9f7aea" : "#2d2146ff"}

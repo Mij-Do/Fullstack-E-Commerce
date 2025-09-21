@@ -21,6 +21,7 @@ const data = localStorage.getItem("data");
 const resData = data ? JSON.parse(data) : null;
 const token = CookieServices.get("jwt");
 
+
 const router = createBrowserRouter(
     createRoutesFromElements(
         <>
@@ -44,12 +45,12 @@ const router = createBrowserRouter(
                         </ProtectedRoute>
                     } />
                     {resData?.map((product: IProduct) => 
-                        <Route path={`products/${product.id}`} element={
+                        <Route path={`products/${product.documentId}`} element={
                             <ProtectedRoute 
                                     isAllowed={token}
                                     redirectPath="/login"
                                 >
-                                <ViewProduct key={product.id} product={product}/>
+                                <ViewProduct key={product.documentId} product={product}/>
         
                             </ProtectedRoute>} 
                     />)}

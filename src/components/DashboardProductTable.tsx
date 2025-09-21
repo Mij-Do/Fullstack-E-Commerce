@@ -11,10 +11,11 @@ const DashboardProductTable = () => {
     const {open, onOpen, onClose} = useDisclosure();
     const {isLoading, data} = useGetDashboardProductsQuery(0);
     const [removeProduct, {isLoading: isRemoving, isSuccess}] = useDeleteDashboardProductsMutation();
-    console.log(data.data.map((product: IProduct) => product.documentId));
+    console.log(data);
+    console.log(data?.data?.map((product: IProduct) => product.documentId)[0]);
     // handler
     const onRemoveHandler = () => {
-        removeProduct(data.data.map((product: IProduct) => product.documentId));
+        removeProduct(data?.data?.map((product: IProduct) => product.documentId)[2]);
         onClose();
         if (isSuccess) {
             toast.success("Product is Removed");
@@ -37,7 +38,7 @@ const DashboardProductTable = () => {
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    {data.data.map((product: IProduct) => (
+                    {data?.data?.map((product: IProduct) => (
                     <Table.Row key={product.id}>
                         <Table.Cell>{product.id}</Table.Cell>
                         <Table.Cell>{product.title}</Table.Cell>

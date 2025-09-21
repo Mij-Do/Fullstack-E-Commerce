@@ -1,4 +1,5 @@
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
+import CookieServices from '../../services/CookieServices';
 
 export const productsApiSlice = createApi ({
     reducerPath: "api",
@@ -17,8 +18,11 @@ export const productsApiSlice = createApi ({
         deleteDashboardProducts: builder.mutation({
             query: (documentId: string) => {
                 return {
-                    url: `api/products/${documentId}`,
+                    url: `/api/products/${documentId}`,
                     method: "DELETE",
+                    headers: {
+                        Authorization: `Bearer ${CookieServices.get("jwt")}`
+                    },
                 };
             },
         }),
