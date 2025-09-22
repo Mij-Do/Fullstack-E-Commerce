@@ -10,7 +10,7 @@ export const productsApiSlice = createApi ({
     baseQuery: fetchBaseQuery({baseUrl: import.meta.env.VITE_SERVER}),
     endpoints: builder => ({
         getDashboardProducts: builder.query({
-            query: (arg: number) => {
+            query: (arg: string) => {
                 return {
                     url: `/api/products?populate=thumbnail&populate=categories`,
                 }
@@ -21,7 +21,7 @@ export const productsApiSlice = createApi ({
             : ['Products'],
         }),
         updateDashboardProducts: builder.mutation({
-            query: ({documentId, body}) => ({
+            query: ({ documentId, body }) => ({
                 url: `/api/products/${documentId}`,
                 method: "PUT",
                 headers: {
@@ -29,18 +29,24 @@ export const productsApiSlice = createApi ({
                 },
                 body,
             }),
-            async onQueryStarted({id, ...patch}, {dispatch, queryFulfilled}) {
-                const patchResult = 
-                dispatch(productsApiSlice.util.updateQueryData("getDashboardProducts", id, draft => {
-                    Object.assign(draft, patch);
-                }));
+            async onQueryStarted({ documentId, updatedData }, { dispatch, queryFulfilled }) {
+                const patchResult = dispatch(
+                    productsApiSlice.util.updateQueryData("getDashboardProducts", documentId, draft => {
+                        const product = draft.data.find((p: IProduct) => p.documentId === documentId);
+                        if (product) {
+                            Object.assign(product, updatedData);
+                        }
+                    })
+                );
                 try {
                     await queryFulfilled;
                 } catch {
                     patchResult.undo();
                 }
             },
-            invalidatesTags: (documentId) => [{ type: 'Products', documentId }],
+            invalidatesTags: ({ documentId }) => [
+                { type: "Products", id: documentId }
+            ],
         }),
         deleteDashboardProducts: builder.mutation({
             query: (documentId: string) => {

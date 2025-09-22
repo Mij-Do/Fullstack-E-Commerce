@@ -1,6 +1,6 @@
 import { Box, Button, Dialog, Field, Flex, Image, Input, Stack, Table, Textarea, useDisclosure } from "@chakra-ui/react";
 import TableProductSkeleton from "./TableProductSkeleton";
-import { useDeleteDashboardProductsMutation, useGetDashboardProductsQuery } from "../app/services/productsApiSlice";
+import { useDeleteDashboardProductsMutation, useGetDashboardProductsQuery, useUpdateDashboardProductsMutation } from "../app/services/productsApiSlice";
 import type { IProduct } from "../interfaces";
 import Modal from "../shared/Modal";
 import {FiTrash, FiPenTool, FiEye} from "react-icons/fi"
@@ -10,6 +10,7 @@ import { useEffect, useState, type ChangeEvent } from "react";
 
 const DashboardProductTable = () => {
     const defaultValue: IProduct = {
+        id: 0,
         documentId: '',
         title: "",
         description: "",
@@ -23,34 +24,46 @@ const DashboardProductTable = () => {
             url: '',
         },
     }
-    const [removeProductId, setRemoveProductId] = useState('');
+    const [productId, setProductId] = useState<string>('');
     const [productToEdit, setProductToEdit] = useState<IProduct>(defaultValue);
     const {open, onOpen, onClose} = useDisclosure();
     const {open: isOpen, onOpen: onModalOpen, onClose: onModalClose} = useDisclosure();
-    const {isLoading, data} = useGetDashboardProductsQuery(0);
+    const {isLoading, data} = useGetDashboardProductsQuery(productId);
     const [removeProduct, {isLoading: isRemoving, isSuccess}] = useDeleteDashboardProductsMutation();
-    
+    const [updateProduct, {isLoading: isUpdating, isSuccess: isUpdated}] = useUpdateDashboardProductsMutation();
+
     useEffect(() => {
         if (isSuccess) {
-            setRemoveProductId('');
+            setProductId('');
             toast.success("Product is Removed");
         }
-    }, [isSuccess])
+        if (isUpdated) {
+            setProductId('');
+            toast.success("Product Updated");
+        }
+    }, [isSuccess, isUpdated]);
 
     // handler
     const onSubmitHandler = () => {
-        console.log(productToEdit);
         onModalClose();
-        const formData = new FormData();
-
-        formData.append("data", JSON.stringify({
+        const updatedData = {
             title: productToEdit.title,
             description: productToEdit.description,
             price: productToEdit.price,
             stock: productToEdit.stock,
             thumbnail: productToEdit.thumbnail,
-        }))
+        };
+        const formData = new FormData();
+
+        formData.append("data", JSON.stringify(updatedData));
+
+        updateProduct({
+            documentId: productId,
+            body: formData,
+            updatedData,
+        });
     }
+    
     const onChangeHandler = (evt: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const {name, value} = evt.target;
 
@@ -61,7 +74,7 @@ const DashboardProductTable = () => {
     }
     
     const onRemoveHandler = () => {
-        removeProduct(removeProductId);
+        removeProduct(productId);
         onClose();
     }
 
@@ -101,13 +114,14 @@ const DashboardProductTable = () => {
                                 <Button w={5} bg={"blue.400"} _hover={{bg: "blue.200"}} 
                                 onClick={() => {
                                     setProductToEdit(product);
+                                    setProductId(product.documentId);
                                     onModalOpen();
                                 }}
                                 >
                                     <FiPenTool />
                                 </Button>
                                 <Button w={5} bg={"red.400"} _hover={{bg: "red.200"}} onClick={() => {
-                                    setRemoveProductId(product.documentId);
+                                    setProductId(product.documentId);
                                     onOpen();
                                 }}>
                                     <FiTrash />
@@ -167,6 +181,7 @@ const DashboardProductTable = () => {
                             variant={"solid"} 
                             bg={"purple.500"} 
                             _hover={{bg: "purple.300"}}
+                            loading={isUpdating}
                             onClick={onSubmitHandler}
                         >
                             Update
