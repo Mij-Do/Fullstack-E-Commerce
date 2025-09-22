@@ -20,6 +20,28 @@ export const productsApiSlice = createApi ({
             ? [...result.data?.map(({documentId}: IProduct) => ({ type: 'Products' as const, documentId })), 'Products']
             : ['Products'],
         }),
+        updateDashboardProducts: builder.mutation({
+            query: ({documentId, body}) => ({
+                url: `/api/products/${documentId}`,
+                method: "PUT",
+                headers: {
+                    Authorization: `Bearer ${CookieServices.get("jwt")}`
+                },
+                body,
+            }),
+            async onQueryStarted({id, ...patch}, {dispatch, queryFulfilled}) {
+                const patchResult = 
+                dispatch(productsApiSlice.util.updateQueryData("getDashboardProducts", id, draft => {
+                    Object.assign(draft, patch);
+                }));
+                try {
+                    await queryFulfilled;
+                } catch {
+                    patchResult.undo();
+                }
+            },
+            invalidatesTags: (documentId) => [{ type: 'Products', documentId }],
+        }),
         deleteDashboardProducts: builder.mutation({
             query: (documentId: string) => {
                 return {
@@ -35,4 +57,4 @@ export const productsApiSlice = createApi ({
     }),
 });
 
-export const {useGetDashboardProductsQuery, useDeleteDashboardProductsMutation} = productsApiSlice;
+export const {useGetDashboardProductsQuery, useDeleteDashboardProductsMutation, useUpdateDashboardProductsMutation} = productsApiSlice;
