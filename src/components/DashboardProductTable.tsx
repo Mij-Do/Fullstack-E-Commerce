@@ -5,11 +5,26 @@ import type { IProduct } from "../interfaces";
 import Modal from "../shared/Modal";
 import {FiTrash, FiPenTool, FiEye} from "react-icons/fi"
 import toast from "react-hot-toast";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ChangeEvent } from "react";
 
 
 const DashboardProductTable = () => {
+    const defaultValue: IProduct = {
+        documentId: '',
+        title: "",
+        description: "",
+        price: 0,
+        stock: 0,
+        categories: [{
+            title: "",
+        }],
+        thumbnail: {
+            name: '',
+            url: '',
+        },
+    }
     const [removeProductId, setRemoveProductId] = useState('');
+    const [productToEdit, setProductToEdit] = useState<IProduct>(defaultValue);
     const {open, onOpen, onClose} = useDisclosure();
     const {open: isOpen, onOpen: onModalOpen, onClose: onModalClose} = useDisclosure();
     const {isLoading, data} = useGetDashboardProductsQuery(0);
@@ -23,6 +38,15 @@ const DashboardProductTable = () => {
     }, [isSuccess])
 
     // handler
+    const onChangeHandler = (evt: ChangeEvent<HTMLInputElement>) => {
+        const {name, value} = evt.target;
+
+        setProductToEdit({
+            ...productToEdit,
+            [name]: value,
+        })
+    }
+    
     const onRemoveHandler = () => {
         removeProduct(removeProductId);
         onClose();
@@ -62,7 +86,10 @@ const DashboardProductTable = () => {
                         <Table.Cell>
                             <Flex alignItems={"center"} spaceX={2} justifyContent={"flex-end"}>
                                 <Button w={5} bg={"blue.400"} _hover={{bg: "blue.200"}} 
-                                onClick={onModalOpen}
+                                onClick={() => {
+                                    setProductToEdit(product);
+                                    onModalOpen();
+                                }}
                                 >
                                     <FiPenTool />
                                 </Button>
@@ -99,15 +126,15 @@ const DashboardProductTable = () => {
                 <Stack gap="4">
                     <Field.Root>
                         <Field.Label>Product Title</Field.Label>
-                        <Input />
+                        <Input name="title" value={productToEdit.title} onChange={onChangeHandler}/>
                     </Field.Root>
                     <Field.Root>
                         <Field.Label>Product Price</Field.Label>
-                        <Input />
+                        <Input name="price" value={productToEdit.price} onChange={onChangeHandler}/>
                     </Field.Root>
                     <Field.Root>
                         <Field.Label>Product Stock</Field.Label>
-                        <Input />
+                        <Input name="stock" value={productToEdit.stock} onChange={onChangeHandler}/>
                     </Field.Root>
                 </Stack>
             </Modal>

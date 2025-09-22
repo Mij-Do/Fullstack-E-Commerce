@@ -1,22 +1,22 @@
 export interface IProduct {
-    id: number;
+    id?: number;
     documentId: string;
     title: string;
     description: string;
     price: number;
     stock: number;
     categories: [{
-        documentId: string;
-        id: number;
+        documentId?: string;
+        id?: number;
         title: string;
     }];
     thumbnail: {
-        id: number;
-        documentId: string;
+        id?: number;
+        documentId?: string;
         name: string;
         url: string;
     };
-    qty: number;
+    qty?: number;
 }
 
 
