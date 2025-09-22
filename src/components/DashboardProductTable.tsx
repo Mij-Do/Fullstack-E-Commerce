@@ -1,4 +1,4 @@
-import { Box, Button, Dialog, Field, Flex, Image, Input, Stack, Table, useDisclosure } from "@chakra-ui/react";
+import { Box, Button, Dialog, Field, Flex, Image, Input, Stack, Table, Textarea, useDisclosure } from "@chakra-ui/react";
 import TableProductSkeleton from "./TableProductSkeleton";
 import { useDeleteDashboardProductsMutation, useGetDashboardProductsQuery } from "../app/services/productsApiSlice";
 import type { IProduct } from "../interfaces";
@@ -41,8 +41,17 @@ const DashboardProductTable = () => {
     const onSubmitHandler = () => {
         console.log(productToEdit);
         onModalClose();
+        const formData = new FormData();
+
+        formData.append("data", JSON.stringify({
+            title: productToEdit.title,
+            description: productToEdit.description,
+            price: productToEdit.price,
+            stock: productToEdit.stock,
+            thumbnail: productToEdit.thumbnail,
+        }))
     }
-    const onChangeHandler = (evt: ChangeEvent<HTMLInputElement>) => {
+    const onChangeHandler = (evt: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const {name, value} = evt.target;
 
         setProductToEdit({
@@ -132,6 +141,10 @@ const DashboardProductTable = () => {
                         <Field.Root>
                             <Field.Label>Product Title</Field.Label>
                             <Input name="title" value={productToEdit.title} onChange={onChangeHandler}/>
+                        </Field.Root>
+                        <Field.Root>
+                            <Field.Label>Product Description</Field.Label>
+                            <Textarea name="description" value={productToEdit.description} onChange={onChangeHandler}/>
                         </Field.Root>
                         <Field.Root>
                             <Field.Label>Product Price</Field.Label>
