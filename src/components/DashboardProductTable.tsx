@@ -1,4 +1,4 @@
-import { Button, Field, Flex, Image, Input, Stack, Table, useDisclosure } from "@chakra-ui/react";
+import { Box, Button, Dialog, Field, Flex, Image, Input, Stack, Table, useDisclosure } from "@chakra-ui/react";
 import TableProductSkeleton from "./TableProductSkeleton";
 import { useDeleteDashboardProductsMutation, useGetDashboardProductsQuery } from "../app/services/productsApiSlice";
 import type { IProduct } from "../interfaces";
@@ -38,6 +38,10 @@ const DashboardProductTable = () => {
     }, [isSuccess])
 
     // handler
+    const onSubmitHandler = () => {
+        console.log(productToEdit);
+        onModalClose();
+    }
     const onChangeHandler = (evt: ChangeEvent<HTMLInputElement>) => {
         const {name, value} = evt.target;
 
@@ -122,21 +126,40 @@ const DashboardProductTable = () => {
             </Table.Root>
 
             {/* update modal */}
-            <Modal title="Update Product" isOpen={isOpen} onClose={onModalClose} okBtn="Done">
-                <Stack gap="4">
-                    <Field.Root>
-                        <Field.Label>Product Title</Field.Label>
-                        <Input name="title" value={productToEdit.title} onChange={onChangeHandler}/>
-                    </Field.Root>
-                    <Field.Root>
-                        <Field.Label>Product Price</Field.Label>
-                        <Input name="price" value={productToEdit.price} onChange={onChangeHandler}/>
-                    </Field.Root>
-                    <Field.Root>
-                        <Field.Label>Product Stock</Field.Label>
-                        <Input name="stock" value={productToEdit.stock} onChange={onChangeHandler}/>
-                    </Field.Root>
-                </Stack>
+            <Modal title="Update Product" isOpen={isOpen} onClose={onModalClose}>
+                <Box spaceY={4}>
+                    <Stack gap="4">
+                        <Field.Root>
+                            <Field.Label>Product Title</Field.Label>
+                            <Input name="title" value={productToEdit.title} onChange={onChangeHandler}/>
+                        </Field.Root>
+                        <Field.Root>
+                            <Field.Label>Product Price</Field.Label>
+                            <Input name="price" value={productToEdit.price} onChange={onChangeHandler}/>
+                        </Field.Root>
+                        <Field.Root>
+                            <Field.Label>Product Stock</Field.Label>
+                            <Input name="stock" value={productToEdit.stock} onChange={onChangeHandler}/>
+                        </Field.Root>
+                        <Field.Root>
+                            <Field.Label>Product Thumbnail</Field.Label>
+                            <Input name="thumbnail" value={productToEdit.thumbnail.name} onChange={onChangeHandler}/>
+                        </Field.Root>
+                    </Stack>
+                    <Box display={"flex"} spaceX={2}>
+                        <Dialog.ActionTrigger asChild>
+                                <Button variant="outline" onClick={onModalClose}>Cancel</Button>
+                        </Dialog.ActionTrigger>
+                        <Button 
+                            variant={"solid"} 
+                            bg={"purple.500"} 
+                            _hover={{bg: "purple.300"}}
+                            onClick={onSubmitHandler}
+                        >
+                            Update
+                        </Button>
+                    </Box>
+                </Box>
             </Modal>
 
             {/* remove modal */}
@@ -144,10 +167,23 @@ const DashboardProductTable = () => {
                 isOpen={open} 
                 onClose={onClose} 
                 title="Are You Sure ?" 
-                description="Remove Product description" 
-                onRemoveHandler={onRemoveHandler}
-                isRemoving={isRemoving}
-            />
+                description="Remove Product description"
+            > 
+                <Box display={"flex"} spaceX={2}>
+                    <Dialog.ActionTrigger asChild>
+                            <Button variant="outline" onClick={onClose}>Cancel</Button>
+                    </Dialog.ActionTrigger>
+                    <Button 
+                        variant={"solid"} 
+                        bg={"red.500"} 
+                        _hover={{bg: "red.300"}}
+                        loading={isRemoving}
+                        onClick={onRemoveHandler}
+                    >
+                        Remove
+                    </Button>
+                </Box>
+            </Modal>
         </>
     )
 }
