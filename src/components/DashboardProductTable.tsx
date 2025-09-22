@@ -1,4 +1,4 @@
-import { Button, Flex, Image, Table, useDisclosure } from "@chakra-ui/react";
+import { Button, Field, Flex, Image, Input, Stack, Table, useDisclosure } from "@chakra-ui/react";
 import TableProductSkeleton from "./TableProductSkeleton";
 import { useDeleteDashboardProductsMutation, useGetDashboardProductsQuery } from "../app/services/productsApiSlice";
 import type { IProduct } from "../interfaces";
@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 const DashboardProductTable = () => {
     const [removeProductId, setRemoveProductId] = useState('');
     const {open, onOpen, onClose} = useDisclosure();
+    const {open: isOpen, onOpen: onModalOpen, onClose: onModalClose} = useDisclosure();
     const {isLoading, data} = useGetDashboardProductsQuery(0);
     const [removeProduct, {isLoading: isRemoving, isSuccess}] = useDeleteDashboardProductsMutation();
     
@@ -60,7 +61,9 @@ const DashboardProductTable = () => {
                         <Table.Cell>{product.stock}</Table.Cell>
                         <Table.Cell>
                             <Flex alignItems={"center"} spaceX={2} justifyContent={"flex-end"}>
-                                <Button w={5} bg={"blue.400"} _hover={{bg: "blue.200"}}>
+                                <Button w={5} bg={"blue.400"} _hover={{bg: "blue.200"}} 
+                                onClick={onModalOpen}
+                                >
                                     <FiPenTool />
                                 </Button>
                                 <Button w={5} bg={"red.400"} _hover={{bg: "red.200"}} onClick={() => {
@@ -90,6 +93,26 @@ const DashboardProductTable = () => {
                     </Table.Row>
                 </Table.Footer>
             </Table.Root>
+
+            {/* update modal */}
+            <Modal title="Update Product" isOpen={isOpen} onClose={onModalClose} okBtn="Done">
+                <Stack gap="4">
+                    <Field.Root>
+                        <Field.Label>Product Title</Field.Label>
+                        <Input />
+                    </Field.Root>
+                    <Field.Root>
+                        <Field.Label>Product Price</Field.Label>
+                        <Input />
+                    </Field.Root>
+                    <Field.Root>
+                        <Field.Label>Product Stock</Field.Label>
+                        <Input />
+                    </Field.Root>
+                </Stack>
+            </Modal>
+
+            {/* remove modal */}
             <Modal 
                 isOpen={open} 
                 onClose={onClose} 

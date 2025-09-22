@@ -1,17 +1,19 @@
 import { Button, CloseButton, Dialog, Portal } from "@chakra-ui/react";
+import type { ReactNode } from "react";
 
 interface IProps {
     isOpen: boolean;
     onClose: () => void;
     title: string;
-    description: string;
+    children?: ReactNode;
+    description?: string;
     cancelBtn?: string;
     okBtn?: string;
     isRemoving?: boolean;
-    onRemoveHandler: () => void;
+    onRemoveHandler?: () => void;
 }
 
-const Modal = ({isOpen, onClose, title, description, okBtn = "Remove", cancelBtn = "Cancel", onRemoveHandler, isRemoving}: IProps) => {
+const Modal = ({isOpen, onClose, title, description, okBtn = "Remove", cancelBtn = "Cancel", onRemoveHandler, isRemoving, children}: IProps) => {
     return (
         <Dialog.Root open={isOpen} onInteractOutside={onClose} onEscapeKeyDown={onClose}>
             <Portal>
@@ -22,9 +24,8 @@ const Modal = ({isOpen, onClose, title, description, okBtn = "Remove", cancelBtn
                             <Dialog.Title>{title}</Dialog.Title>
                         </Dialog.Header>
                         <Dialog.Body>
-                            <p>
-                                {description}
-                            </p>
+                            {children}
+                            {description}
                         </Dialog.Body>
                         <Dialog.Footer>
                             <Dialog.ActionTrigger asChild>
@@ -32,8 +33,8 @@ const Modal = ({isOpen, onClose, title, description, okBtn = "Remove", cancelBtn
                             </Dialog.ActionTrigger>
                             <Button 
                                 variant={"solid"} 
-                                bg={"red.500"} 
-                                _hover={{bg: "red.300"}} 
+                                bg={okBtn === "Done" ? "purple.500" : "red.500"} 
+                                _hover={okBtn === "Done" ? {bg: "purple.300"} : {bg: "red.300"}} 
                                 loading={isRemoving}
                                 onClick={onRemoveHandler}>
                                 {okBtn}
