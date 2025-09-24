@@ -20,6 +20,6 @@ const networkSlice = createSlice({
     },
 });
 
-export const {  } = networkSlice.actions;
+export const { networkMode } = networkSlice.actions;
 
 export default networkSlice;

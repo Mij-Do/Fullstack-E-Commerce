@@ -1,34 +1,54 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { networkMode } from "../app/features/networkSlice";
 
 interface IProps {
     children: ReactNode;
 }
 
 const InternetConnectionProvider = ({children}: IProps) => {
-    const [isOnline, setIsOnline] = useState(true);
-    const toastRef = useRef('');
+    const [isOnline, setIsOnline] = useState(navigator.onLine);
+    const dispatch = useDispatch();
+    const toastRef = useRef<string | null>('');
 
-    useEffect(() => {
-        setIsOnline(navigator.onLine);
-    }, []);
+    // const addToast = () => {
+    //     if (!isOnline) {
+    //         toastRef.current = toast.error("You are Offline", { duration: 10000 });
+    //     }
+    // }
 
-    window.addEventListener("online", () => {
+    const setOnline = () => {
         setIsOnline(true);
-    });
-    
-    window.addEventListener("offline", () => {
-        setIsOnline(false);
-    });
+        dispatch(networkMode(true));
+        if (toastRef.current) {
+            toast.dismiss(toastRef.current);
+            toastRef.current = null;
+        }
 
-    const addToast = () => {
-        if (!isOnline) {
-            toastRef.current = toast.error("You are Offline", { duration: 10000 });
+        toast.success("You are back Online ✅", { duration: 4000 });
+    }
+    const setOffline = () => {
+        setIsOnline(false);
+        dispatch(networkMode(false));
+
+        if (!toastRef.current) {
+            toastRef.current = toast.error("You are Offline ❌", { duration: 10000 });
         }
     }
 
+    useEffect(() => {
+        window.addEventListener("online", setOnline);
+        window.addEventListener("offline", setOffline);
+
+        return () => {
+            window.removeEventListener("online", setOnline);
+            window.removeEventListener("offline", setOffline);
+        }
+    }, []);
+
     if(!isOnline) {
-        return <>{children} {addToast()}</>;
+        return <>{children}</>;
     }
 
     return children;
