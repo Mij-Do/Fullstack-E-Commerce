@@ -18,6 +18,17 @@ export const productsApiSlice = createApi({
                     ? [...result.data?.map(({ documentId }: IProduct) => ({ type: 'Products' as const, id: documentId })), { type: 'Products', id: 'LIST' }]
                     : [{ type: 'Products', id: 'LIST' }],
         }),
+        createDashboardProducts: builder.mutation({
+            query: ( body : unknown) => ({
+                url: `/api/products`,
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${CookieServices.get("jwt")}`
+                },
+                body,
+            }),
+            invalidatesTags: [{ type: "Products", id: "LIST" }]
+        }),
         updateDashboardProducts: builder.mutation({
             query: ({ documentId, body }: {documentId: string; body: unknown}) => ({
                 url: `/api/products/${documentId}`,
@@ -71,4 +82,10 @@ export const productsApiSlice = createApi({
     }),
 });
 
-export const { useGetDashboardProductsQuery, useDeleteDashboardProductsMutation, useUpdateDashboardProductsMutation, useUploadFileMutation } = productsApiSlice;
+export const { 
+    useGetDashboardProductsQuery, 
+    useDeleteDashboardProductsMutation, 
+    useUpdateDashboardProductsMutation, 
+    useUploadFileMutation,
+    useCreateDashboardProductsMutation
+} = productsApiSlice;
