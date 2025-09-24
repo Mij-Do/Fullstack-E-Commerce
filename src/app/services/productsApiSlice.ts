@@ -1,27 +1,25 @@
-import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import CookieServices from '../../services/CookieServices';
-import type { IProduct } from '../../interfaces';
+import type { IProduct, IUploadResponse } from '../../interfaces';
 
-export const productsApiSlice = createApi ({
+export const productsApiSlice = createApi({
     reducerPath: "api",
     tagTypes: ["Products"],
     refetchOnReconnect: true,
     refetchOnMountOrArgChange: true,
-    baseQuery: fetchBaseQuery({baseUrl: import.meta.env.VITE_SERVER}),
+    baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_SERVER }),
     endpoints: builder => ({
         getDashboardProducts: builder.query({
-            query: (arg: string) => {
-                return {
-                    url: `/api/products?populate=thumbnail&populate=categories`,
-                }
-            },
+            query: () => ({
+                url: `/api/products?populate=thumbnail&populate=categories`,
+            }),
             providesTags: (result) =>
-            result
-            ? [...result.data?.map(({documentId}: IProduct) => ({ type: 'Products' as const, documentId })), 'Products']
-            : ['Products'],
+                result
+                    ? [...result.data?.map(({ documentId }: IProduct) => ({ type: 'Products' as const, id: documentId })), { type: 'Products', id: 'LIST' }]
+                    : [{ type: 'Products', id: 'LIST' }],
         }),
         updateDashboardProducts: builder.mutation({
-            query: ({ documentId, body }) => ({
+            query: ({ documentId, body }: {documentId: string; body: unknown}) => ({
                 url: `/api/products/${documentId}`,
                 method: "PUT",
                 headers: {
@@ -29,12 +27,12 @@ export const productsApiSlice = createApi ({
                 },
                 body,
             }),
-            async onQueryStarted({ documentId, updatedData }, { dispatch, queryFulfilled }) {
+            async onQueryStarted({documentId, ...patch}, { dispatch, queryFulfilled }) {
                 const patchResult = dispatch(
-                    productsApiSlice.util.updateQueryData("getDashboardProducts", documentId, draft => {
+                    productsApiSlice.util.updateQueryData("getDashboardProducts", undefined, draft => {
                         const product = draft.data.find((p: IProduct) => p.documentId === documentId);
                         if (product) {
-                            Object.assign(product, updatedData);
+                            Object.assign(product, patch);
                         }
                     })
                 );
@@ -45,9 +43,19 @@ export const productsApiSlice = createApi ({
                 }
             },
             invalidatesTags: ({ documentId }) => [
-                { type: "Products", id: documentId }
+                { type: "Products", id: documentId },
             ],
         }),
+        uploadFile: builder.mutation<IUploadResponse[], FormData>({ 
+            query: (body: FormData) => ({ 
+                url: '/api/upload', 
+                method: 'POST', 
+                headers: {
+                    Authorization: `Bearer ${CookieServices.get("jwt")}`
+                },
+                body,
+            })
+        }),    
         deleteDashboardProducts: builder.mutation({
             query: (documentId: string) => {
                 return {
@@ -63,4 +71,4 @@ export const productsApiSlice = createApi ({
     }),
 });
 
-export const {useGetDashboardProductsQuery, useDeleteDashboardProductsMutation, useUpdateDashboardProductsMutation} = productsApiSlice;
+export const { useGetDashboardProductsQuery, useDeleteDashboardProductsMutation, useUpdateDashboardProductsMutation, useUploadFileMutation } = productsApiSlice;

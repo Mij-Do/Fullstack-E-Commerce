@@ -1,7 +1,7 @@
 import { Box, Button, Dialog, Field, Flex, Image, Input, Stack, Table, Textarea, useDisclosure } from "@chakra-ui/react";
 import TableProductSkeleton from "./TableProductSkeleton";
-import { useDeleteDashboardProductsMutation, useGetDashboardProductsQuery, useUpdateDashboardProductsMutation } from "../app/services/productsApiSlice";
-import type { IProduct } from "../interfaces";
+import { useDeleteDashboardProductsMutation, useGetDashboardProductsQuery, useUpdateDashboardProductsMutation, useUploadFileMutation } from "../app/services/productsApiSlice";
+import type { IProduct, IUploadResponse } from "../interfaces";
 import Modal from "../shared/Modal";
 import {FiTrash, FiPenTool, FiEye} from "react-icons/fi"
 import toast from "react-hot-toast";
@@ -26,11 +26,13 @@ const DashboardProductTable = () => {
     }
     const [productId, setProductId] = useState<string>('');
     const [productToEdit, setProductToEdit] = useState<IProduct>(defaultValue);
+    const [thumbnail, setThumbnail] = useState<File | undefined>(undefined);
     const {open, onOpen, onClose} = useDisclosure();
     const {open: isOpen, onOpen: onModalOpen, onClose: onModalClose} = useDisclosure();
-    const {isLoading, data} = useGetDashboardProductsQuery(productId);
+    const {isLoading, data} = useGetDashboardProductsQuery(undefined);
     const [removeProduct, {isLoading: isRemoving, isSuccess}] = useDeleteDashboardProductsMutation();
     const [updateProduct, {isLoading: isUpdating, isSuccess: isUpdated}] = useUpdateDashboardProductsMutation();
+    const [uploadFile] = useUploadFileMutation();
 
     useEffect(() => {
         if (isSuccess) {
@@ -44,24 +46,51 @@ const DashboardProductTable = () => {
     }, [isSuccess, isUpdated]);
 
     // handler
-    const onSubmitHandler = () => {
+    const onSubmitHandler = async () => {
         onModalClose();
         const updatedData = {
             title: productToEdit.title,
             description: productToEdit.description,
             price: productToEdit.price,
             stock: productToEdit.stock,
-            thumbnail: productToEdit.thumbnail,
         };
-        const formData = new FormData();
 
-        formData.append("data", JSON.stringify(updatedData));
+        // const formData = new FormData();
+        // formData.append("data", JSON.stringify(updatedData));
+        // const bodyPayload = { data: updatedData };
 
-        updateProduct({
-            documentId: productId,
-            body: formData,
-            updatedData,
-        });
+        // updateProduct({
+        //     documentId: productId,
+        //     body: bodyPayload,
+        // });
+
+        try {
+            const bodyPayload: any = { data: updatedData };
+
+            if (thumbnail) {
+                const formData = new FormData();
+                formData.append("files", thumbnail);            
+
+                const res: IUploadResponse[] = await uploadFile(formData).unwrap();
+                const newThumbnailId = res[0].id;
+                bodyPayload.data.thumbnail = newThumbnailId;
+            }
+
+            await updateProduct({
+                documentId: productId,
+                body: bodyPayload,
+            });
+            
+            toast.success("Product Updated");
+            setProductId("");
+        } catch (err) {
+            console.error(err);
+            toast.error("Failed to update product");
+        }
+        
+        console.log(productId)
+        console.log(productToEdit)
+        console.log(thumbnail)
     }
     
     const onChangeHandler = (evt: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -71,6 +100,13 @@ const DashboardProductTable = () => {
             ...productToEdit,
             [name]: value,
         })
+    }
+
+    const onChangeThumbnail = (evt: ChangeEvent<HTMLInputElement>) => {
+        const files = evt.target.files;
+        if (files && files.length > 0) {
+            setThumbnail(files[0]);
+        }
     }
     
     const onRemoveHandler = () => {
@@ -170,7 +206,7 @@ const DashboardProductTable = () => {
                         </Field.Root>
                         <Field.Root>
                             <Field.Label>Product Thumbnail</Field.Label>
-                            <Input name="thumbnail" value={productToEdit.thumbnail.name} onChange={onChangeHandler}/>
+                            <Input id="thumbnail" type="file" h={"full"} p={2} onChange={onChangeThumbnail}/>
                         </Field.Root>
                     </Stack>
                     <Box display={"flex"} spaceX={2}>
@@ -217,3 +253,4 @@ const DashboardProductTable = () => {
 }
 
 export default DashboardProductTable;
+

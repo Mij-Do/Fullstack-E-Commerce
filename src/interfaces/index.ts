@@ -40,3 +40,9 @@ export interface ApiErrorData {
             status?: number;
         };
 }
+
+export interface IUploadResponse {
+    id: number;
+    name: string;
+    url: string;
+}
