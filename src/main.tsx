@@ -16,15 +16,15 @@ const queryClient = new QueryClient();
 
 
 createRoot(document.getElementById('root')!).render(
-  <InternetConnectionProvider>
+  <QueryClientProvider client={queryClient}>
     <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <QueryClientProvider client={queryClient}>
+      <InternetConnectionProvider>
+        <PersistGate loading={null} persistor={persistor}>
           <ChakraProvider value={defaultSystem}>
             <App />
           </ChakraProvider>
-        </QueryClientProvider>
-      </PersistGate>
+        </PersistGate>
+      </InternetConnectionProvider>
     </Provider>
-  </InternetConnectionProvider>
+  </QueryClientProvider>
 )
