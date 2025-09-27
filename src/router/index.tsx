@@ -18,9 +18,20 @@ import DashboardHome from "../pages/dashboard";
 import DashboardProduct from "../pages/dashboard/DashboardProduct";
 
 const data = localStorage.getItem("data");
-if (data === null) {localStorage.removeItem("data")};
-const resData = data ? JSON.parse(data) : null;
-console.log(data)
+
+let resData = null;
+
+if (data) {
+    try {
+        resData = JSON.parse(data);
+    } catch (e) {
+        console.error("Failed to parse JSON from localStorage:", e);
+        localStorage.removeItem("data");
+    }
+}
+
+console.log(resData);
+
 const token = CookieServices.get("jwt");
 
 
