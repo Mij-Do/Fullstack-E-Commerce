@@ -26,7 +26,7 @@ const ViewProductsInDrawer = ({product}: IProps) => {
             border={"1px solid gray"} p={2} mb={2} 
             rounded={"md"}>
             <Image 
-                src={`${import.meta.env.VITE_SERVER}${thumbnail?.url}`} 
+                src={`${thumbnail?.url}`} 
                 alt={thumbnail.name}
                 w={"100px"}
             />

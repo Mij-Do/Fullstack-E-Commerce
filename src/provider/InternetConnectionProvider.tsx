@@ -12,12 +12,6 @@ const InternetConnectionProvider = ({children}: IProps) => {
     const dispatch = useDispatch();
     const toastRef = useRef<string | null>('');
 
-    // const addToast = () => {
-    //     if (!isOnline) {
-    //         toastRef.current = toast.error("You are Offline", { duration: 10000 });
-    //     }
-    // }
-
     const setOnline = () => {
         setIsOnline(true);
         dispatch(networkMode(true));

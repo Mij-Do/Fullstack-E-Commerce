@@ -36,7 +36,6 @@ const DashboardProductTable = () => {
     const [updateProduct, {isLoading: isUpdating, isSuccess: isUpdated}] = useUpdateDashboardProductsMutation();
     const [createProduct, {isLoading: isCreating, isSuccess: isCreated}] = useCreateDashboardProductsMutation();
     const [uploadFile] = useUploadFileMutation();
-
     useEffect(() => {
         if (isSuccess) {
             setProductId('');
@@ -116,7 +115,7 @@ const DashboardProductTable = () => {
             toast.error("Failed to update product");
         }
     }
-    
+
     const onChangeHandlerUpdate = (evt: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const {name, value} = evt.target;
 
@@ -141,7 +140,6 @@ const DashboardProductTable = () => {
         removeProduct(productId);
         onClose();
     }
-
     if (isLoading) return  <TableProductSkeleton />;
     return (
         <>
@@ -171,8 +169,8 @@ const DashboardProductTable = () => {
                             <Table.Cell>{product.categories.map(title => title.title)}</Table.Cell>
                             <Table.Cell>
                                 <Image 
-                                    src={`${import.meta.env.VITE_SERVER}${product.thumbnail.url}`} 
-                                    alt={product.thumbnail.name}
+                                    src={product?.thumbnail?.url} 
+                                    alt={product?.thumbnail?.name}
                                     w={"15%"} h={"15%"}
                                     rounded={"full"}
                                 />
