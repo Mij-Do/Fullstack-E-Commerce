@@ -18,7 +18,9 @@ import DashboardHome from "../pages/dashboard";
 import DashboardProduct from "../pages/dashboard/DashboardProduct";
 
 const data = localStorage.getItem("data");
+if (data === null) {localStorage.removeItem("data")};
 const resData = data ? JSON.parse(data) : null;
+console.log(data)
 const token = CookieServices.get("jwt");
 
 
