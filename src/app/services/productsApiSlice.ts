@@ -7,11 +7,11 @@ export const productsApiSlice = createApi({
     tagTypes: ["Products"],
     refetchOnReconnect: true,
     refetchOnMountOrArgChange: true,
-    baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_API_URL }),
+    baseQuery: fetchBaseQuery({ baseUrl: `${import.meta.env.VITE_API_URL}/api` }),
     endpoints: builder => ({
         getDashboardProducts: builder.query({
             query: () => ({
-                url: `/api/products?populate=thumbnail&populate=categories`,
+                url: `/products?populate=thumbnail&populate=categories`,
             }),
             providesTags: (result) =>
                 result
@@ -20,7 +20,7 @@ export const productsApiSlice = createApi({
         }),
         createDashboardProducts: builder.mutation({
             query: ( body : unknown) => ({
-                url: `/api/products`,
+                url: `/products`,
                 method: "POST",
                 headers: {
                     Authorization: `Bearer ${CookieServices.get("jwt")}`
@@ -31,7 +31,7 @@ export const productsApiSlice = createApi({
         }),
         updateDashboardProducts: builder.mutation({
             query: ({ documentId, body }: {documentId: string; body: unknown}) => ({
-                url: `/api/products/${documentId}`,
+                url: `/products/${documentId}`,
                 method: "PUT",
                 headers: {
                     Authorization: `Bearer ${CookieServices.get("jwt")}`
@@ -59,7 +59,7 @@ export const productsApiSlice = createApi({
         }),
         uploadFile: builder.mutation<IUploadResponse[], FormData>({ 
             query: (body: FormData) => ({ 
-                url: '/api/upload', 
+                url: '/upload', 
                 method: 'POST', 
                 headers: {
                     Authorization: `Bearer ${CookieServices.get("jwt")}`
@@ -70,7 +70,7 @@ export const productsApiSlice = createApi({
         deleteDashboardProducts: builder.mutation({
             query: (documentId: string) => {
                 return {
-                    url: `/api/products/${documentId}`,
+                    url: `/products/${documentId}`,
                     method: "DELETE",
                     headers: {
                         Authorization: `Bearer ${CookieServices.get("jwt")}`

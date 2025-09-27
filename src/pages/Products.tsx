@@ -18,10 +18,12 @@ const ProductsPage = () => {
     });
     localStorage.setItem("data", JSON.stringify(data?.data));
     
-    if(isLoading) return 
-    <Grid m={5} templateColumns={"repeat(auto-fill, minmax(300px, 1fr))"} gap={4}>
-        {Array.from({length: 20}, (_, idx) => <ProductSkeleton key={idx}/>)}
-    </Grid>;
+    if(isLoading) return (
+        <Grid m={5} templateColumns={"repeat(auto-fill, minmax(300px, 1fr))"} gap={4}>
+            {Array.from({length: 20}, (_, idx) => <ProductSkeleton key={idx}/>)}
+        </Grid>
+    )
+    
 
     return (
         <Grid m={5} templateColumns={"repeat(auto-fill, minmax(300px, 1fr))"} gap={4}>
