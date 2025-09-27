@@ -7,7 +7,7 @@ export const productsApiSlice = createApi({
     tagTypes: ["Products"],
     refetchOnReconnect: true,
     refetchOnMountOrArgChange: true,
-    baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_SERVER }),
+    baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_API_URL }),
     endpoints: builder => ({
         getDashboardProducts: builder.query({
             query: () => ({

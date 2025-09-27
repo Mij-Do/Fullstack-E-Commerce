@@ -8,7 +8,7 @@ import ProductSkeleton from "../components/ProductSkeleton";
 
 const ProductsPage = () => {
     const getProduct = async () => {
-        const {data} = await axios.get(`${import.meta.env.VITE_SERVER}/api/products?populate=thumbnail&populate=categories`);
+        const {data} = await axios.get(`${import.meta.env.VITE_API_URL}/api/products?populate=thumbnail&populate=categories`);
         return data;
     };
 
