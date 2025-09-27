@@ -24,7 +24,6 @@ const Login = () => {
     const [user, setUser] = useState<IUser>({
         identifier: '',
         password: '',
-        documentId: '',
     });
     const [errors, setErrors] = useState({
         identifier: '',
@@ -52,7 +51,6 @@ const Login = () => {
         setUser({
             identifier: '',
             password: '',
-            documentId: '',
         });
         setTimeout(() => {
             location.replace("/");

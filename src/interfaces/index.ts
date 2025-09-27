@@ -21,8 +21,6 @@ export interface IProduct {
 
 
 export interface IUser {
-    id?: number;
-    documentId: string;
     identifier: string;
     password: string;
 }
