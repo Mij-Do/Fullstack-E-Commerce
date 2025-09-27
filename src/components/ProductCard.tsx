@@ -1,5 +1,5 @@
 import { useColorMode } from "@chakra-ui/color-mode";
-import { Box, Button, Card, Flex, Image, Stack, Text } from "@chakra-ui/react";
+import { Box, Button, Card, Image, Text } from "@chakra-ui/react";
 import { NavLink } from "react-router-dom";
 import type { IProduct } from "../interfaces";
 import { useDispatch, useSelector } from "react-redux";
