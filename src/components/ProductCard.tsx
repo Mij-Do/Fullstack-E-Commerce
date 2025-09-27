@@ -26,7 +26,7 @@ const ProductCard = ({product}: IProps) => {
             toast.success("Product Added to Your Cart Successfully");
         }
     }
-    
+    console.log("API URL:", import.meta.env.VITE_API_URL);
 return (
     <Card.Root overflow="hidden" border={"1px solid gray.300"}>
         <Card.Body gap="2">
