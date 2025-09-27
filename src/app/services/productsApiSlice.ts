@@ -2,12 +2,18 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import CookieServices from '../../services/CookieServices';
 import type { IProduct, IUploadResponse } from '../../interfaces';
 
+
+const baseURL =
+    import.meta.env.MODE === "development"
+        ? import.meta.env.VITE_API_URL_DEVE
+        : import.meta.env.VITE_API_URL_PROD;
+
 export const productsApiSlice = createApi({
     reducerPath: "api",
     tagTypes: ["Products"],
     refetchOnReconnect: true,
     refetchOnMountOrArgChange: true,
-    baseQuery: fetchBaseQuery({ baseUrl: `${import.meta.env.VITE_API_URL}/api` }),
+    baseQuery: fetchBaseQuery({ baseUrl: `${baseURL}/api` }),
     endpoints: builder => ({
         getDashboardProducts: builder.query({
             query: () => ({

@@ -30,8 +30,6 @@ if (data) {
     }
 }
 
-console.log(resData);
-
 const token = CookieServices.get("jwt");
 
 

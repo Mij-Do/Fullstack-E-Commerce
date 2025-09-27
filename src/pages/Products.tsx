@@ -1,14 +1,14 @@
 import { Grid } from "@chakra-ui/react";
 import ProductCard from "../components/ProductCard";
-import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import type { IProduct } from "../interfaces";
 import ProductSkeleton from "../components/ProductSkeleton";
+import { axiosInstance } from "../config/axios.config";
 
 
 const ProductsPage = () => {
     const getProduct = async () => {
-        const {data} = await axios.get(`${import.meta.env.VITE_API_URL}/api/products?populate=thumbnail&populate=categories`);
+        const {data} = await axiosInstance.get(`/products?populate=thumbnail&populate=categories`);
         return data;
     };
 
