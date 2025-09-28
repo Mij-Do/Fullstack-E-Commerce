@@ -51,7 +51,10 @@ const loginSlice = createSlice({
             date.setDate(date.getDate() + IN_DAYS);
             const options = {path: "/", expires: date};
             CookieServices.set("jwt", action.payload.jwt, options);
-            toast.success('Successfully created!');
+            toast.success('Successfully LoggedIn!');
+            setTimeout(() => {
+                location.replace("/");
+            }, 2000);
         });
         builder.addCase(userLogin.rejected, (state, action) => {
             state.loading = false;

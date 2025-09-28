@@ -1,7 +1,7 @@
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
-import { ChakraProvider, defaultSystem } from '@chakra-ui/react';
+import { ChakraProvider, createSystem, defaultSystem } from '@chakra-ui/react';
 import {
   QueryClient,
   QueryClientProvider,
@@ -10,10 +10,9 @@ import { Provider } from "react-redux";
 import { persistor, store } from './app/store.ts';
 import { PersistGate } from 'redux-persist/integration/react';
 import InternetConnectionProvider from './provider/InternetConnectionProvider.tsx';
-
+import { ThemeProvider } from 'next-themes';
 
 const queryClient = new QueryClient();
-
 
 createRoot(document.getElementById('root')!).render(
   <QueryClientProvider client={queryClient}>
@@ -21,7 +20,9 @@ createRoot(document.getElementById('root')!).render(
       <InternetConnectionProvider>
         <PersistGate loading={null} persistor={persistor}>
           <ChakraProvider value={defaultSystem}>
-            <App />
+            <ThemeProvider attribute="class" defaultTheme="light" enableSystem storageKey="ui-theme">
+              <App />
+            </ThemeProvider>
           </ChakraProvider>
         </PersistGate>
       </InternetConnectionProvider>

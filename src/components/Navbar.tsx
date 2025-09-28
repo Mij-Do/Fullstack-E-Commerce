@@ -11,13 +11,16 @@ import {FaWindowClose} from 'react-icons/fa';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import Nav from './ui/Nav';
 import { NavLink } from 'react-router-dom';
+import { useTheme } from 'next-themes';
 
 
 
 const Navbar = () => {
-const { open, onOpen, onClose } = useDisclosure();
-return (
-        <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4}>
+    const { theme } = useTheme();
+    
+    const { open, onOpen, onClose } = useDisclosure();
+    return (
+        <Box bg={theme === "light" ? "gray.100" : "gray.900"} px={4}>
             <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
                 <IconButton
                     size="md"

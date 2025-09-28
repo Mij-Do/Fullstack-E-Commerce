@@ -4,8 +4,9 @@ import { Button } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../../app/store";
 import { onOpenCartDrawerAction } from "../../app/features/globalSlice";
+import Mode from "./Mode";
 
-const Nav = () => {
+const Nav = () => {    
     const dispatch = useDispatch();
     const {cartItems} = useSelector((state: RootState) => state.cart);
     const logout = () => {
@@ -19,6 +20,7 @@ const Nav = () => {
             <NavLink to={"products"}>Products</NavLink>
             <NavLink to={"about"}>About</NavLink>
             <NavLink to={"dashboard"}>Dashboard</NavLink>
+            <Mode />
             <Button onClick={onOpenDrawer}>Cart {cartItems.length}</Button>
             <Button onClick={logout}>Logout</Button>
         </>

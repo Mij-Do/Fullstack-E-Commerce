@@ -47,15 +47,11 @@ const Login = () => {
             setIsValid(true);
             return;
         } 
-        console.log(user)
         dispatch(userLogin(user));
         setUser({
             identifier: '',
             password: '',
         });
-        setTimeout(() => {
-            location.replace("/");
-        }, 2000);
     }
     
     const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
