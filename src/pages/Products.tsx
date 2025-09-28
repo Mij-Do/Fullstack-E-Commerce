@@ -27,7 +27,7 @@ const ProductsPage = () => {
 
     return (
         <Grid m={5} templateColumns={"repeat(auto-fill, minmax(300px, 1fr))"} gap={4}>
-            {data?.data?.map((product: IProduct) => <ProductCard key={product.id} product={product}/>)}
+            {data?.data?.length && data?.data?.map((product: IProduct) => <ProductCard key={product.id} product={product}/>)}
         </Grid>
     )
 }

@@ -9,3 +9,10 @@ export const addToCart = (cartItem: IProduct[], product: IProduct) => {
 
     return [...cartItem, {...product, qty: 1}];
 }
+
+
+export const txtLength = (txt: string, max: number) => {
+    if (txt.length > max) {
+        return `${txt.slice(0, max)}...`;
+    }
+}

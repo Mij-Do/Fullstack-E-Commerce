@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addProductToCart } from "../app/features/cartSlice";
 import toast from "react-hot-toast";
 import type { RootState } from "../app/store";
+import { txtLength } from "../utils";
 
 interface IProps {
     product: IProduct;
@@ -13,7 +14,7 @@ interface IProps {
 
 const ProductCard = ({product}: IProps) => {
     const {cartItems} = useSelector((state: RootState) => state.cart);
-    const {thumbnail, title, description, documentId} = product;
+    const {thumbnail, title, description, price, categories, documentId} = product;
     const {colorMode} = useColorMode();
     const dispatch = useDispatch();
 
@@ -26,7 +27,11 @@ const ProductCard = ({product}: IProps) => {
             toast.success("Product Added to Your Cart Successfully");
         }
     }
-    console.log("API URL:", import.meta.env.VITE_API_URL);
+    const renderCategory = categories?.map(category => (
+        <Text textStyle="md" mt="2">
+            {category.title}
+        </Text>
+    ))
 return (
     <Card.Root overflow="hidden" border={"1px solid gray.300"}>
         <Card.Body gap="2">
@@ -40,11 +45,12 @@ return (
             <Box blockSize={200} display={"flex"} flexDir={"column"} spaceY={2} mt={2} textAlign={"center"} justifyContent={"space-between"}>
                 <Card.Title>{title}</Card.Title>
                 <Card.Description>
-                    {description}
+                    {txtLength(description, 20)}
                 </Card.Description>
                 <Text textStyle="2xl" fontWeight="medium" letterSpacing="tight" mt="2">
-                    $450
+                    ${price}
                 </Text>
+                {renderCategory}
                 <Box display={"flex"} spaceX={1} justifyContent={"space-between"}>
                     <Button 
                         asChild

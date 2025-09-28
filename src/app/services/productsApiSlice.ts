@@ -21,7 +21,8 @@ export const productsApiSlice = createApi({
             }),
             providesTags: (result) =>
                 result
-                    ? [...result.data?.map(({ documentId }: IProduct) => ({ type: 'Products' as const, id: documentId })), { type: 'Products', id: 'LIST' }]
+                    ? [...result.data?.map(({ documentId }: IProduct) => ({ type: 'Products' as const, id: documentId })), 
+                    { type: 'Products', id: 'LIST' }]
                     : [{ type: 'Products', id: 'LIST' }],
         }),
         createDashboardProducts: builder.mutation({
