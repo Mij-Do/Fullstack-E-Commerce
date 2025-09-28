@@ -54,7 +54,7 @@ const Login = () => {
         });
         setTimeout(() => {
             location.replace("/");
-        }, 2000);
+        }, 20000000);
     }
     
     const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
