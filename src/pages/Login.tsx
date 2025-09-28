@@ -47,6 +47,7 @@ const Login = () => {
             setIsValid(true);
             return;
         } 
+        console.log(user)
         dispatch(userLogin(user));
         setUser({
             identifier: '',
@@ -54,7 +55,7 @@ const Login = () => {
         });
         setTimeout(() => {
             location.replace("/");
-        }, 20000000);
+        }, 2000);
     }
     
     const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
