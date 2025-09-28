@@ -87,7 +87,7 @@ export const productsApiSlice = createApi({
         }),
     }),
 });
-
+console.log(CookieServices.get('jwt'));
 export const { 
     useGetDashboardProductsQuery, 
     useDeleteDashboardProductsMutation, 
