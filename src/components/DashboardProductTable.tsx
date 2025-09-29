@@ -167,7 +167,7 @@ const DashboardProductTable = () => {
                             <Table.Row key={product.id}>
                                 <Table.Cell>{product.id}</Table.Cell>
                                 <Table.Cell>{product.title}</Table.Cell>
-                                <Table.Cell>{product.categories.map(title => title.title)}</Table.Cell>
+                                <Table.Cell>{product.categories?.map(category => category.title)}</Table.Cell>
                                 <Table.Cell>
                                     <Image 
                                         src={product?.thumbnail?.url} 
