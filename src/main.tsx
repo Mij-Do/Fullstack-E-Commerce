@@ -1,7 +1,7 @@
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
-import { ChakraProvider, defaultSystem } from '@chakra-ui/react';
+import { Provider as ChakraProvider } from "./components/ui/provider"
 import {
   QueryClient,
   QueryClientProvider,
@@ -19,7 +19,7 @@ createRoot(document.getElementById('root')!).render(
     <Provider store={store}>
       <InternetConnectionProvider>
         <PersistGate loading={null} persistor={persistor}>
-          <ChakraProvider value={defaultSystem}>
+          <ChakraProvider>
             <ThemeProvider attribute="class" defaultTheme="light" enableSystem storageKey="ui-theme">
               <App />
             </ThemeProvider>

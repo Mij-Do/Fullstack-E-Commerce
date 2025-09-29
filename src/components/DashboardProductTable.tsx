@@ -3,9 +3,9 @@ import TableProductSkeleton from "./TableProductSkeleton";
 import { useCreateDashboardProductsMutation, useDeleteDashboardProductsMutation, useGetDashboardProductsQuery, useUpdateDashboardProductsMutation, useUploadFileMutation } from "../app/services/productsApiSlice";
 import type { IProduct, IUploadResponse } from "../interfaces";
 import Modal from "../shared/Modal";
-import {FiTrash, FiPenTool, FiEye} from "react-icons/fi"
-import toast from "react-hot-toast";
+import {FiTrash, FiPenTool, FiEye} from "react-icons/fi";
 import { useEffect, useState, type ChangeEvent } from "react";
+import { toaster } from "./ui/toaster";
 
 
 const DashboardProductTable = () => {
@@ -39,18 +39,24 @@ const DashboardProductTable = () => {
     useEffect(() => {
         if (isSuccess) {
             setProductId('');
-            toast.success("Product is Removed");
+            toaster.success({
+                title: "Product is Removed"
+            });
         }
         if (isUpdated) {
             setProductId('');
-            toast.success("Product Updated");
+            toaster.success({
+                title: "Product Updated"
+            });
         }
     }, [isSuccess, isUpdated]);
     useEffect(() => {
         if (isCreated) {
             setProductId('');
             setProductToCreate(defaultValue);
-            toast.success("Product Created");
+            toaster.success({
+                title: "Product is Created"
+            });
         }
     }, [isCreated]);
 
@@ -80,7 +86,9 @@ const DashboardProductTable = () => {
 
         } catch (err) {
             console.error(err);
-            toast.error("Failed to create product");
+            toaster.error({
+                title: "Failed to create product"
+            });
         }
     }
 
@@ -112,7 +120,10 @@ const DashboardProductTable = () => {
             
         } catch (err) {
             console.error(err);
-            toast.error("Failed to update product");
+            toaster.error({
+                title: "Failed to update product"
+            });
+            
         }
     }
 

@@ -5,6 +5,7 @@ import type { RootState } from '../store';
 import toast from 'react-hot-toast';
 import type { AxiosError } from 'axios';
 import CookieServices from '../../services/CookieServices';
+import { toaster } from '../../components/ui/toaster';
 
 
 
@@ -51,7 +52,9 @@ const loginSlice = createSlice({
             date.setDate(date.getDate() + IN_DAYS);
             const options = {path: "/", expires: date};
             CookieServices.set("jwt", action.payload.jwt, options);
-            toast.success('Successfully LoggedIn!');
+            toaster.success({
+                title: 'Successfully LoggedIn!'
+            });
             setTimeout(() => {
                 location.replace("/");
             }, 2000);
@@ -60,7 +63,9 @@ const loginSlice = createSlice({
             state.loading = false;
             state.data = null;
             state.error = action.payload as string;
-            toast.error(`${(action.payload as AxiosError<ApiErrorData>)?.response?.data?.error?.message}`);
+            toaster.error({
+                title: `${(action.payload as AxiosError<ApiErrorData>)?.response?.data?.error?.message}`
+            });
         })
     },
 })
