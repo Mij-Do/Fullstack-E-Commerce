@@ -2,7 +2,6 @@ import { createAsyncThunk, createSlice, type PayloadAction } from '@reduxjs/tool
 import { axiosInstance } from '../../config/axios.config';
 import type { ApiErrorData, IResponse, IUser } from '../../interfaces';
 import type { RootState } from '../store';
-import toast from 'react-hot-toast';
 import type { AxiosError } from 'axios';
 import CookieServices from '../../services/CookieServices';
 import { toaster } from '../../components/ui/toaster';
