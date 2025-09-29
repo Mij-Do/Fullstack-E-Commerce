@@ -1,4 +1,3 @@
-import { useColorModeValue } from '@chakra-ui/color-mode'
 import {
 Flex,
 Box,
@@ -16,9 +15,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { userLogin } from '../app/features/loginSlice';
 import type { AppDispatch, RootState } from '../app/store';
 import type { IUser } from '../interfaces';
+import { useTheme } from 'next-themes';
 
 
 const Login = () => {
+    const { theme } = useTheme();
     const dispatch = useDispatch<AppDispatch>();
     const {loading} = useSelector((state: RootState) => state.login);
     const [user, setUser] = useState<IUser>({
@@ -63,10 +64,10 @@ const Login = () => {
 
     return (
         <Flex
-            minH={'80vh'}
+            h={'100vh'}
             align={'center'}
             justify={'center'}
-            bg={useColorModeValue('gray.50', 'gray.800')}
+            bg={theme === "light" ? "gray.100" : "gray.800"}
         >
             <Stack spaceY={5} mx={'auto'} maxW={'lg'} py={5} px={6}>
                 <Stack align={'center'}>
@@ -74,11 +75,11 @@ const Login = () => {
                 </Stack>
                 <Box
                     rounded={'lg'}
-                    bg={useColorModeValue('white', 'gray.700')}
+                    bg={theme === "light" ? "gray.100" : "gray.700"}
                     boxShadow={'lg'}
                     p={8}
                 >
-                    <form onSubmit={onSubmitHandler}>
+                    <form onSubmit={onSubmitHandler}> 
                         <Field.Root invalid={isValid}>
                             <Field.Label>
                                 Email 

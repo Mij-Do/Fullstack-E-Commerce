@@ -1,4 +1,3 @@
-import { useColorMode } from "@chakra-ui/color-mode";
 import { Box, Button, Card, Image, Text } from "@chakra-ui/react";
 import { NavLink } from "react-router-dom";
 import type { IProduct } from "../interfaces";
@@ -7,6 +6,7 @@ import { addProductToCart } from "../app/features/cartSlice";
 import toast from "react-hot-toast";
 import type { RootState } from "../app/store";
 import { txtLength } from "../utils";
+import { useTheme } from "next-themes";
 
 interface IProps {
     product: IProduct;
@@ -15,7 +15,7 @@ interface IProps {
 const ProductCard = ({product}: IProps) => {
     const {cartItems} = useSelector((state: RootState) => state.cart);
     const {thumbnail, title, description, price, categories, documentId} = product;
-    const {colorMode} = useColorMode();
+    const { theme } = useTheme();
     const dispatch = useDispatch();
 
     const addProduct = () => {
@@ -55,21 +55,23 @@ return (
                     <Button 
                         asChild
                         w={"50%"}
-                        bg={colorMode === "light" ? "#9f7aea" : "#2d2146ff"}
+                        bg={theme === "light" ? "#9f7aea" : "#2d2146ff"}
                         _hover={{
-                            bg: colorMode === "light" ? "#2d2146ff" : "#9f7aea",
+                            bg: theme === "light" ? "#2d2146ff" : "#9f7aea",
                             border: "transparent",
                         }}
+                        color={theme === "dark" ? "white" : "white"}
                     >
                         <NavLink to={`${documentId}`}>View Details</NavLink>
                     </Button>
                     <Button
                         w={"50%"}
-                        bg={colorMode === "light" ? "#2d2146ff" : "#7246c9ff"}
+                        bg={theme === "light" ? "#2d2146ff" : "#9f7aea"}
                         _hover={{
-                            bg: colorMode === "light" ? "#9f7aea" : "#2d2146ff",
+                            bg: theme === "light" ? "#9f7aea" : "#2d2146ff",
                             border: "transparent",
                         }}
+                        color={theme === "dark" ? "white" : "white"}
                         onClick={addProduct}
                     >
                         Add to Cart

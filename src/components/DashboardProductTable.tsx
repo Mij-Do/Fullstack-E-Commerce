@@ -143,78 +143,80 @@ const DashboardProductTable = () => {
     if (isLoading) return  <TableProductSkeleton />;
     return (
         <>
-            <Flex flexDir={"column"} alignItems={"center"} spaceY={5}>
+            <Flex flexDir={"column"} alignItems={"center"} spaceY={2}>
                 <Button 
                     onClick={onModalOpenCreate}
                 >
                     Create Product
                 </Button>
-                <Table.Root size="sm" striped>
-                    <Table.Header>
-                        <Table.Row>
-                            <Table.ColumnHeader>ID</Table.ColumnHeader>
-                            <Table.ColumnHeader>Title</Table.ColumnHeader>
-                            <Table.ColumnHeader>Category</Table.ColumnHeader>
-                            <Table.ColumnHeader>Thumbnail</Table.ColumnHeader>
-                            <Table.ColumnHeader>Price</Table.ColumnHeader>
-                            <Table.ColumnHeader>Stock</Table.ColumnHeader>
-                            <Table.ColumnHeader textAlign="end">Action</Table.ColumnHeader>
-                        </Table.Row>
-                    </Table.Header>
-                    <Table.Body>
-                        {data?.data?.length ? data?.data?.map((product: IProduct) => (
-                        <Table.Row key={product.id}>
-                            <Table.Cell>{product.id}</Table.Cell>
-                            <Table.Cell>{product.title}</Table.Cell>
-                            <Table.Cell>{product.categories.map(title => title.title)}</Table.Cell>
-                            <Table.Cell>
-                                <Image 
-                                    src={product?.thumbnail?.url} 
-                                    alt={product?.thumbnail?.name}
-                                    w={"15%"} h={"15%"}
-                                    rounded={"full"}
-                                />
-                            </Table.Cell>
-                            <Table.Cell>{product.price}</Table.Cell>
-                            <Table.Cell>{product.stock}</Table.Cell>
-                            <Table.Cell>
-                                <Flex alignItems={"center"} spaceX={2} justifyContent={"flex-end"}>
-                                    <Button w={5} bg={"blue.400"} _hover={{bg: "blue.200"}} 
-                                    onClick={() => {
-                                        setProductToEdit(product);
-                                        setProductId(product.documentId);
-                                        onModalOpenUpdate();
-                                    }}
-                                    >
-                                        <FiPenTool />
-                                    </Button>
-                                    <Button w={5} bg={"red.400"} _hover={{bg: "red.200"}} onClick={() => {
-                                        setProductId(product.documentId);
-                                        onOpen();
-                                    }}>
-                                        <FiTrash />
-                                    </Button>
-                                    <Button w={5} bg={"purple.400"} _hover={{bg: "purple.200"}}>
-                                        <FiEye />
-                                    </Button>
-                                </Flex>
-                            </Table.Cell>
-                        </Table.Row>
-                        )) 
-                        :  <h2>You Have No Products ...</h2> }
-                    </Table.Body>
-                    <Table.Footer>
-                        <Table.Row>
-                            <Table.ColumnHeader>ID</Table.ColumnHeader>
-                            <Table.ColumnHeader>Title</Table.ColumnHeader>
-                            <Table.ColumnHeader>Category</Table.ColumnHeader>
-                            <Table.ColumnHeader>Thumbnail</Table.ColumnHeader>
-                            <Table.ColumnHeader>Price</Table.ColumnHeader>
-                            <Table.ColumnHeader>Stock</Table.ColumnHeader>
-                            <Table.ColumnHeader textAlign="end">Action</Table.ColumnHeader>
-                        </Table.Row>
-                    </Table.Footer>
-                </Table.Root>
+                <Table.ScrollArea borderWidth="1px" w={"3xl"} rounded={"md"}>
+                    <Table.Root size="sm" striped>
+                        <Table.Header>
+                            <Table.Row>
+                                <Table.ColumnHeader>ID</Table.ColumnHeader>
+                                <Table.ColumnHeader>Title</Table.ColumnHeader>
+                                <Table.ColumnHeader>Category</Table.ColumnHeader>
+                                <Table.ColumnHeader>Thumbnail</Table.ColumnHeader>
+                                <Table.ColumnHeader>Price</Table.ColumnHeader>
+                                <Table.ColumnHeader>Stock</Table.ColumnHeader>
+                                <Table.ColumnHeader textAlign="end">Action</Table.ColumnHeader>
+                            </Table.Row>
+                        </Table.Header>
+                        <Table.Body>
+                            {data?.data?.length ? data?.data?.map((product: IProduct) => (
+                            <Table.Row key={product.id}>
+                                <Table.Cell>{product.id}</Table.Cell>
+                                <Table.Cell>{product.title}</Table.Cell>
+                                <Table.Cell>{product.categories.map(title => title.title)}</Table.Cell>
+                                <Table.Cell>
+                                    <Image 
+                                        src={product?.thumbnail?.url} 
+                                        alt={product?.thumbnail?.name}
+                                        w={"40%"} h={"40%"}
+                                        rounded={"full"}
+                                    />
+                                </Table.Cell>
+                                <Table.Cell>{product.price}</Table.Cell>
+                                <Table.Cell>{product.stock}</Table.Cell>
+                                <Table.Cell>
+                                    <Flex alignItems={"center"} spaceX={2} justifyContent={"flex-end"}>
+                                        <Button w={5} bg={"blue.400"} _hover={{bg: "blue.200"}} 
+                                        onClick={() => {
+                                            setProductToEdit(product);
+                                            setProductId(product.documentId);
+                                            onModalOpenUpdate();
+                                        }}
+                                        >
+                                            <FiPenTool />
+                                        </Button>
+                                        <Button w={5} bg={"red.400"} _hover={{bg: "red.200"}} onClick={() => {
+                                            setProductId(product.documentId);
+                                            onOpen();
+                                        }}>
+                                            <FiTrash />
+                                        </Button>
+                                        <Button w={5} bg={"purple.400"} _hover={{bg: "purple.200"}}>
+                                            <FiEye />
+                                        </Button>
+                                    </Flex>
+                                </Table.Cell>
+                            </Table.Row>
+                            )) 
+                            :  <h2>You Have No Products ...</h2> }
+                        </Table.Body>
+                        <Table.Footer>
+                            <Table.Row>
+                                <Table.ColumnHeader>ID</Table.ColumnHeader>
+                                <Table.ColumnHeader>Title</Table.ColumnHeader>
+                                <Table.ColumnHeader>Category</Table.ColumnHeader>
+                                <Table.ColumnHeader>Thumbnail</Table.ColumnHeader>
+                                <Table.ColumnHeader>Price</Table.ColumnHeader>
+                                <Table.ColumnHeader>Stock</Table.ColumnHeader>
+                                <Table.ColumnHeader textAlign="end">Action</Table.ColumnHeader>
+                            </Table.Row>
+                        </Table.Footer>
+                    </Table.Root>
+                </Table.ScrollArea>
             </Flex>
 
             {/* create modal */}

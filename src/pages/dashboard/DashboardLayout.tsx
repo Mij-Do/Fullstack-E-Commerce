@@ -1,24 +1,25 @@
 import { useColorModeValue } from "@chakra-ui/color-mode";
 import {
     Box,
-    Flex,
     Text,
     Stack,
-    HStack,
     Button,
     IconButton,
     Drawer,
     CloseButton,
     useBreakpointValue,
 } from "@chakra-ui/react";
+import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { FiMenu } from "react-icons/fi";
 import { NavLink, Outlet } from "react-router-dom";
+import Mode from "../../components/ui/Mode";
+import CookieServices from "../../services/CookieServices";
 
 
-function SidebarContent() {
+const SidebarContent = () => {
     return (
-        <Stack>
+        <Stack w={"full"}>
             <Text fontSize="2xl" fontWeight="bold">
                 My Dashboard
             </Text>
@@ -33,7 +34,7 @@ function SidebarContent() {
 }
 
 const DashboardLayout = () => {
-    const sidebarBg = useColorModeValue("gray.100", "gray.900");
+    const { theme } = useTheme();
     const [open, setOpen] = useState(false);
     const isDesktop = useBreakpointValue({ base: false, md: true });
 
@@ -43,46 +44,60 @@ const DashboardLayout = () => {
         }
     }, [isDesktop]);
 
-        const onClose = () => setOpen(false);
-        const onOpen = () => setOpen(true);
+    const onClose = () => setOpen(false);
+    const onOpen = () => setOpen(true);
     
+    const logout = () => {
+            CookieServices.remove("jwt"); 
+            location.reload();
+        }
+
 
     return (
-        <Flex h="100vh" bg={useColorModeValue("gray.50", "gray.800")}>
-
-        {open ?
-            <Drawer.Root open={open} onInteractOutside={onClose}>
-                <Drawer.Content bg={sidebarBg} display={{ base: "block", md: "none" }} w={"100vh"}>
-                    <Drawer.CloseTrigger asChild>
-                        <CloseButton size="md" onClick={onClose}/>
-                    </Drawer.CloseTrigger>
-                    <Drawer.Header>Menu</Drawer.Header>
-                    <Drawer.Body>
-                        <SidebarContent />
-                    </Drawer.Body>
-                </Drawer.Content>
-            </Drawer.Root> 
-            :
-            <Box
-                w="220px"
-                p="4"
-                bg={sidebarBg}
-                borderRight="1px solid"
-                borderColor="gray.200"
-                display={{ base: "none", md: "block" }} // hidden on mobile/tablet
+        <Box h={"100vh"} display={"flex"} bg={useColorModeValue("gray.50", "gray.800")}>
+            {open ?
+                <Drawer.Root open={open} onInteractOutside={onClose}>
+                    <Drawer.Content bg={theme === "light" ? "gray.200" : "gray.800"}>
+                        <Drawer.CloseTrigger asChild>
+                            <CloseButton size="md" onClick={onClose}/>
+                        </Drawer.CloseTrigger>
+                        <Drawer.Header>Menu</Drawer.Header>
+                        <Drawer.Body>
+                            <SidebarContent />
+                        </Drawer.Body>
+                    </Drawer.Content>
+                </Drawer.Root> 
+                :
+                <Box
+                    w="250px"
+                    p="4"
+                    bg={theme === "light" ? "gray.200" : "gray.800"}
+                    borderRight="1px solid"
+                    borderColor="gray.200"
+                    display={{ base: "none", md: "block" }}
+                >
+                    <SidebarContent />
+                </Box>
+            }
+            {/* Main Content */}
+            <Box 
+                display={"flex"} 
+                w={"full"} 
+                bg={theme === "light" ? "white" : "gray.700"} 
+                flexDir="column"
+                position={open ? "absolute" : ""}
             >
-                <SidebarContent />
-            </Box>
-        }
-        {/* Main Content */}
-            <Flex flex="1" direction="column" position={`${open && "absolute"}`} w={"full"}>
             {/* Header */}
-                <HStack
+                <Stack
+                    display={"flex"}
+                    flexDir={"row"}
                     px="6"
                     py="4"
                     borderBottom="1px solid"
                     borderColor="gray.200"
-                    justify="space-between"
+                    justifyContent="space-between"
+                    alignItems={"center"}
+                    bg={theme === "light" ? "gray.100" : "gray.900"}
                 >
                 {/* Hamburger button only on mobile */}
                     <IconButton
@@ -92,19 +107,24 @@ const DashboardLayout = () => {
                     >
                         <FiMenu />
                     </IconButton>
-
+                    <Mode />
                     <Text fontSize="xl" fontWeight="bold">
                         Overview
                     </Text>
-                    <Button>Log Out</Button>
-                </HStack>
+                    <NavLink to={"/"}> Home </NavLink>
+                    <Button
+                        onClick={logout}
+                    >
+                        Log Out
+                    </Button>
+                </Stack>
 
                 {/* Content */}
-                <Box p={3}>
+                <Box h={"100vh"} m={2}>
                     <Outlet />
                 </Box>
-            </Flex>
-        </Flex>
+            </Box>
+        </Box>
     );
 }
 
