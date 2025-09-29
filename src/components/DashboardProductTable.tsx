@@ -43,13 +43,15 @@ const DashboardProductTable = () => {
                 title: "Product is Removed"
             });
         }
+    }, [isSuccess]);
+    useEffect(() => {
         if (isUpdated) {
             setProductId('');
             toaster.success({
                 title: "Product Updated"
             });
         }
-    }, [isSuccess, isUpdated]);
+    }, [isUpdated]);
     useEffect(() => {
         if (isCreated) {
             setProductId('');
