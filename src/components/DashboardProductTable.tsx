@@ -172,7 +172,7 @@ const DashboardProductTable = () => {
                                     <Image 
                                         src={product?.thumbnail?.url} 
                                         alt={product?.thumbnail?.name}
-                                        w={"40%"} h={"40%"}
+                                        w={"80px"} h={"60px"}
                                         rounded={"full"}
                                     />
                                 </Table.Cell>
