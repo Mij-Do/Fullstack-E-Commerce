@@ -6,6 +6,7 @@ import Modal from "../shared/Modal";
 import {FiTrash, FiPenTool, FiEye} from "react-icons/fi";
 import { useEffect, useState, type ChangeEvent } from "react";
 import { toaster } from "./ui/toaster";
+import Select from "./Select";
 
 
 const DashboardProductTable = () => {
@@ -251,6 +252,10 @@ const DashboardProductTable = () => {
                         <Field.Root>
                             <Field.Label>Product Stock</Field.Label>
                             <Input name="stock" value={productToCreate.stock} onChange={onChangeHandlerUpdate}/>
+                        </Field.Root>
+                        <Field.Root>
+                            <Field.Label>Product Category</Field.Label>
+                            <Select />
                         </Field.Root>
                         <Field.Root>
                             <Field.Label>Product Thumbnail</Field.Label>
